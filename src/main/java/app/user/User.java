@@ -1,4 +1,4 @@
-package com.example.demo.user;
+package app.user;
 
 import jakarta.persistence.*;
 
