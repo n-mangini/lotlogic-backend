@@ -6,26 +6,26 @@ import jakarta.persistence.*;
 @Table
 public class User {
     @Id
-    @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
-    private int id;
+    @GeneratedValue(generator = "user_sequence", strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "user_gen", sequenceName = "user_seq", initialValue = 50, allocationSize = 1)
+    private Integer userId;
     private String dni;
     private String name;
     private String surname;
     private String password;
     @Transient
-    private boolean isOwner;
+    private boolean isOwner = false;
 
     public User() {
     }
 
-    public User(int id, String dni, String name, String surname, String password, boolean isOwner) {
-        this.id = id;
+    public User(Integer userId, String dni, String name, String surname, String password) {
+        this.userId = userId;
         this.dni = dni;
         this.name = name;
         this.surname = surname;
         this.password = password;
-        this.isOwner = isOwner;
+        this.isOwner = isOwner();
     }
 
     public User(String dni, String name, String surname, String password) {
@@ -36,27 +36,43 @@ public class User {
         this.isOwner = isOwner();
     }
 
+    private boolean isOwner() {
+        return this.password.length() > 4;
+    }
+
+    public int getUserId() {
+        return this.userId;
+    }
+
     public String getDni() {
         return this.dni;
     }
 
-    public boolean isOwner() {
-        return getPassword().length() > 4;
+    public String getName() {
+        return this.name;
+    }
+
+    public String getSurname() {
+        return this.surname;
     }
 
     public String getPassword() {
         return this.password;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", dni='" + dni + '\'' +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", password='" + password + '\'' +
-                ", isOwner=" + isOwner +
-                '}';
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

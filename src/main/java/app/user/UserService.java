@@ -1,5 +1,6 @@
 package app.user;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -14,13 +15,16 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<User> getUsers() {
-        return userRepository.findAll();
+    public void addNewOwner(@RequestBody @NotNull User user) {
+        Optional<User> userOptional = this.userRepository.findUserByDni(user.getDni());
+        if (userOptional.isPresent())
+            throw new IllegalStateException("user " + userOptional.get().getUserId() + " already exists");
+        this.userRepository.save(user);
     }
 
-    public void addNewUser(@RequestBody User user) {
-        Optional<User> userOptional = userRepository.findUserByDni(user.getDni());
-        if (userOptional.isPresent()) throw new IllegalStateException("El usuario ya existe");
-        userRepository.save(user);
+    public void deleteOwner(@NotNull Integer userId) {
+        if (!this.userRepository.existsById(userId))
+            throw new IllegalStateException("user " + userId + " not found");
+        this.userRepository.deleteById(userId);
     }
 }
