@@ -18,8 +18,13 @@ public class UserController {
         this.userService.addNewOwner(user);
     }
 
-    @DeleteMapping(path = "{userId}")
-    public void deleteOwner(@PathVariable("userId") Integer userId) {
+    @DeleteMapping(path = "/api/user/{userId}")
+    public void deleteOwner(@PathVariable Integer userId) {
         this.userService.deleteOwner(userId);
+    }
+
+    @PutMapping(path = "/api/user/update/{userId}")
+    public void modifyOwner(@RequestBody User user, @PathVariable Integer userId) {
+        this.userService.modifyOwner(user.getDni(), user.getName(), user.getSurname(), user.getPassword(), userId);
     }
 }
