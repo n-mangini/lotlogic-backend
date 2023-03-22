@@ -4,13 +4,13 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table
+@Table(name = "user")
 public class User {
     @Id
     @GeneratedValue(generator = "increment")
     @GenericGenerator(name = "increment", strategy = "increment")
     @Column(name = "user_id")
-    private Integer userId;
+    private Long userId;
 
     @Column(name = "dni", length = 9)
     private String dni;
@@ -30,7 +30,7 @@ public class User {
     public User() {
     }
 
-    public User(Integer userId, String dni, String firstName, String lastName, String password) {
+    public User(Long userId, String dni, String firstName, String lastName, String password) {
         this.userId = userId;
         this.dni = dni;
         this.firstName = firstName;
@@ -51,7 +51,7 @@ public class User {
         return this.password.length() > 4;
     }
 
-    public int getUserId() {
+    public Long getUserId() {
         return this.userId;
     }
 

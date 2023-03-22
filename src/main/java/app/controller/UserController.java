@@ -20,16 +20,12 @@ public class UserController {
     }
 
     @DeleteMapping(path = "/api/user/delete/{userId}")
-    public void deleteOwner(@PathVariable final Integer userId) {
+    public void deleteOwner(@PathVariable final Long userId) {
         this.userService.deleteOwner(userId);
     }
 
     @PutMapping(path = "/api/user/update/{userId}")
-    public void modifyOwner(@RequestBody final User user, @PathVariable final Integer userId) {
+    public void modifyOwner(@RequestBody final User user, @PathVariable final Long userId) {
         this.userService.modifyOwner(user.getDni(), user.getFirstName(), user.getLastName(), user.getPassword(), userId);
-    }
-
-    private void checkOwnerPassword(final String password) {
-        if (password.length() < 4) throw new IllegalStateException("password is too short");
     }
 }

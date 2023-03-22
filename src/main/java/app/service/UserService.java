@@ -17,20 +17,33 @@ public class UserService {
     }
 
     public void addNewOwner(@RequestBody @NotNull User user) {
-        Optional<User> userOptional = this.userRepository.findUserByDni(user.getDni());
-        if (userOptional.isPresent())
-            throw new IllegalStateException("user " + userOptional.get().getUserId() + " already exists");
-        if (user.getPassword().length() < 4) throw new IllegalStateException();
+        checkOwnerWithSameDniExists(user);
+        checkOwnerPassword(user.getPassword());
         this.userRepository.save(user);
     }
 
-    public void deleteOwner(@NotNull Integer userId) {
-        if (!this.userRepository.existsById(userId))
-            throw new IllegalStateException("user " + userId + " not found");
+    public void deleteOwner(@NotNull Long userId) {
+        checkOwnerExistsById(userId);
         this.userRepository.deleteById(userId);
     }
 
-    public void modifyOwner(String dni, String firstName, String lastName, String password, @NotNull Integer userId) {
+    public void modifyOwner(String dni, String firstName, String lastName, String password, @NotNull Long userId) {
+        checkOwnerExistsById(userId);
         this.userRepository.updateUserById(dni, firstName, lastName, password, userId);
+    }
+
+    private void checkOwnerExistsById(Long userId) {
+        if (!this.userRepository.existsById(userId))
+            throw new IllegalStateException("user " + userId + " not found");
+    }
+
+    private void checkOwnerWithSameDniExists(final User user) {
+        Optional<User> userOptional = this.userRepository.findUserByDni(user.getDni());
+        if (userOptional.isPresent())
+            throw new IllegalStateException("user with dni: " + userOptional.get().getDni() + " already exists");
+    }
+
+    private void checkOwnerPassword(final String password) {
+        if (password.length() < 4) throw new IllegalStateException("password is too short");
     }
 }
