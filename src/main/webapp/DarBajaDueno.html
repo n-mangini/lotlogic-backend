@@ -40,11 +40,49 @@
     <br><br>
 
     <h3 id="contraseña">Contraseña:</h3>
-    <input type="text">
+    <input type="password">
 
     <br></br>
 
-    <button type="submit">Dar de baja usuario dueño</button>
+    <button id= "Baja"; type="submit">Dar de baja usuario dueño</button>
+
+    <script>
+        document.getElementById("Baja").addEventListener("click", function() {
+            const nombreApellido = document.querySelector('#nombre > input').value;
+            const dni = document.querySelector('#DNI > input').value;
+            const password = document.querySelector('#contraseña > input').value;
+            const confirmacionPassword = document.querySelector('#confirmacion > input').value;
+    
+            if (password !== confirmacionPassword) {
+                alert('Las contraseñas no coinciden');
+                return;
+            }
+    
+            const nuevoUsuario = {
+                name: nombreApellido.split(' ')[0],
+                surname: nombreApellido.split(' ')[1],
+                dni: dni,
+                password: password
+            };
+    
+            fetch('/api/user/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(nuevoUsuario)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al agregar usuario');
+                }
+                alert('Usuario eliminado correctamente');
+            })
+            .catch(error => {
+                alert(error.message);
+            });
+        });
+    </script>
 
 
 </body>
