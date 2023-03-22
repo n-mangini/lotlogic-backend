@@ -1,5 +1,6 @@
-package app.user;
+package app.repository;
 
+import app.model.User;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -15,6 +16,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Transactional
     @Modifying
-    @Query("UPDATE User u set u.dni = ?1, u.name = ?2, u.surname = ?3, u.password = ?4 WHERE u.userId = ?5")
-    void updateUserById(String dni, String name, String surname, String password, Integer userId);
+    @Query("UPDATE User u set u.dni = ?1, u.firstName = ?2, u.lastName = ?3, u.password = ?4 WHERE u.userId = ?5")
+    void updateUserById(String dni, String firstName, String lastName, String password, Integer userId);
 }

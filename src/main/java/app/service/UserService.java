@@ -1,5 +1,7 @@
-package app.user;
+package app.service;
 
+import app.model.User;
+import app.repository.UserRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +20,7 @@ public class UserService {
         Optional<User> userOptional = this.userRepository.findUserByDni(user.getDni());
         if (userOptional.isPresent())
             throw new IllegalStateException("user " + userOptional.get().getUserId() + " already exists");
+        if (user.getPassword().length() < 4) throw new IllegalStateException();
         this.userRepository.save(user);
     }
 
@@ -27,7 +30,7 @@ public class UserService {
         this.userRepository.deleteById(userId);
     }
 
-    public void modifyOwner(String dni, String name, String surname, String password, @NotNull Integer userId) {
-        this.userRepository.updateUserById(dni, name, surname, password, userId);
+    public void modifyOwner(String dni, String firstName, String lastName, String password, @NotNull Integer userId) {
+        this.userRepository.updateUserById(dni, firstName, lastName, password, userId);
     }
 }
