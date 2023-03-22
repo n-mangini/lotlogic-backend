@@ -3,12 +3,14 @@ package app.service;
 import app.model.User;
 import app.repository.UserRepository;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Optional;
 
 @Service
+@Component
 public class UserService {
     private final UserRepository userRepository;
 
