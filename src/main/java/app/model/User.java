@@ -36,7 +36,6 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
-        this.isOwner = isOwner();
     }
 
     public User(String dni, String firstName, String lastName, String password) {
@@ -44,11 +43,10 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
-        this.isOwner = isOwner();
     }
 
     public boolean isOwner() {
-        return this.password.length() > 4;
+        return this.isOwner;
     }
 
     public Long getUserId() {
@@ -85,5 +83,9 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setOwner(boolean owner) {
+        this.isOwner = owner;
     }
 }

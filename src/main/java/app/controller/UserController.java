@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
+@RequestMapping(path = "/api/user")
 public class UserController {
     private final UserService userService;
 
@@ -17,19 +18,19 @@ public class UserController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(path = "/api/user/add", consumes = {"application/json"})
+    @PostMapping(path = "/add", consumes = {"application/json"})
     public void addOwner(@RequestBody final User user) {
         this.userService.addNewOwner(user);
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping(path = "/api/user/delete/{userId}", consumes = {"application/json"})
+    @DeleteMapping(path = "/delete/{userId}")
     public void deleteOwner(@PathVariable final Long userId) {
         this.userService.deleteOwner(userId);
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PutMapping(path = "/api/user/update/{userId}", consumes = {"application/json"})
+    @PutMapping(path = "/update/{userId}", consumes = {"application/json"})
     public void modifyOwner(@RequestBody final User user, @PathVariable final Long userId) {
         this.userService.modifyOwner(user.getDni(), user.getFirstName(), user.getLastName(), user.getPassword(), userId);
     }
