@@ -1,9 +1,9 @@
 package app.service;
 
 import app.model.User;
+import app.model.form.UserEditForm;
 import app.repository.UserRepository;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.context.annotation.Role;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +26,12 @@ public class UserService {
         this.userRepository.save(user);
     }
 
+    public void addNewEmployee(@RequestBody @NotNull User user) {
+        //check password is 4 digit pin
+        user.setOwner(false);
+        this.userRepository.save(user);
+    }
+
     public void deleteOwner(@NotNull Long userId) {
         final Optional<User> userById = this.userRepository.findById(userId);
         if (userById.isPresent()) {
@@ -39,10 +45,41 @@ public class UserService {
         }
     }
 
-    public void modifyOwner(String dni, String firstName, String lastName, String password, @NotNull Long userId) {
+    public void deleteEmployee(@NotNull Long userId) {
         final Optional<User> userById = this.userRepository.findById(userId);
         if (userById.isPresent()) {
-            this.userRepository.updateUserById(dni, firstName, lastName, password, userId);
+            if (!(userById.get().isOwner())) {
+                this.userRepository.deleteById(userId);
+            } else {
+                throw new IllegalStateException("user " + userId + " is not employee");
+            }
+        } else {
+            throw new NoSuchElementException("user " + userId + " not found");
+        }
+    }
+
+    public void modifyOwner(@NotNull Long userId, @NotNull UserEditForm userEditForm) {
+        final Optional<User> userById = this.userRepository.findById(userId);
+        if (userById.isPresent()) {
+            if ((userById.get().isOwner())) {
+                this.userRepository.updateUserById(userId, userEditForm.getDni(), userEditForm.getFirstName(), userEditForm.getLastName(), userEditForm.getPassword());
+
+            } else {
+                throw new IllegalStateException("user " + userId + " is not owner");
+            }
+        } else {
+            throw new NoSuchElementException("user " + userId + " not found");
+        }
+    }
+
+    public void modifyEmployee(@NotNull Long userId, @NotNull UserEditForm userEditForm) {
+        final Optional<User> userById = this.userRepository.findById(userId);
+        if (userById.isPresent()) {
+            if (!(userById.get().isOwner())) {
+                this.userRepository.updateUserById(userId, userEditForm.getDni(), userEditForm.getFirstName(), userEditForm.getLastName(), userEditForm.getPassword());
+            } else {
+                throw new IllegalStateException("user " + userId + " is not employee");
+            }
         } else {
             throw new NoSuchElementException("user " + userId + " not found");
         }

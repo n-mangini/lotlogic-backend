@@ -9,23 +9,23 @@ public class User {
     @Id
     @GeneratedValue(generator = "increment")
     @GenericGenerator(name = "increment", strategy = "increment")
-    @Column(name = "user_id")
+    @Column
     private Long userId;
 
-    @Column(name = "dni", length = 9)
+    @Column(length = 9)
     private String dni;
 
-    @Column(name = "first_name", length = 46)
+    @Column(length = 46)
     private String firstName;
 
-    @Column(name = "last_name", length = 46)
+    @Column(length = 46)
     private String lastName;
 
-    @Column(name = "password", length = 16)
+    @Column(length = 16)
     private String password;
 
-    @Transient
-    private boolean isOwner = false;
+    @Column
+    private boolean isOwner;
 
     public User() {
     }
