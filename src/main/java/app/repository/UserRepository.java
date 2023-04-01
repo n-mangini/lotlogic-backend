@@ -17,12 +17,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("UPDATE User u set u.dni = ?2, u.firstName = ?3, u.lastName = ?4, u.password = ?5 WHERE u.userId = ?1")
     void updateUserById(Long userId, String dni, String firstName, String lastName, String password);
 
-    //TODO Change object for user
     Optional<User> findByDni(String dni);
 
-    @Query("SELECT u.userId, u.firstName, u.lastName FROM User u WHERE u.isOwner = false")
+    //TODO Change object for user
+    @Query("SELECT u.userId, u.firstName, u.lastName FROM User u WHERE u.role = 'EMPLOYEE'")
     List<Object> findAllEmployees();
 
-    @Query("SELECT u.userId, u.firstName, u.lastName FROM User u WHERE u.isOwner = true")
+    @Query("SELECT u.userId, u.firstName, u.lastName FROM User u WHERE u.role = 'OWNER'")
     List<Object> findAllOwners();
 }

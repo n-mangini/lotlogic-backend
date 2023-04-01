@@ -1,6 +1,7 @@
 package app.service;
 
 import app.model.User;
+import app.model.UserRole;
 import app.model.form.UserEditForm;
 import app.repository.UserRepository;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +28,7 @@ public class UserService {
         if (!userByDni.isPresent()) {
             if (user.getPassword().length() < 4)
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, "password is too short");
-            user.setOwner(true);
+            user.setRole(UserRole.OWNER);
             this.userRepository.save(user);
         } else {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "owner with DNI " + userByDni.get().getDni() + " already exists");
@@ -39,7 +40,7 @@ public class UserService {
         if (!userByDni.isPresent()) {
             if (user.getPassword().length() > 4)
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, "PIN must be 4 digit");
-            user.setOwner(false);
+            user.setRole(UserRole.EMPLOYEE);
             this.userRepository.save(user);
         } else {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "employee with DNI " + userByDni.get().getDni() + " already exists");

@@ -25,7 +25,8 @@ public class User {
     private String password;
 
     @Column
-    private boolean isOwner;
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
     public User() {
     }
@@ -46,7 +47,7 @@ public class User {
     }
 
     public boolean isOwner() {
-        return this.isOwner;
+        return this.role.equals(UserRole.OWNER);
     }
 
     public Long getUserId() {
@@ -85,7 +86,7 @@ public class User {
         this.password = password;
     }
 
-    public void setOwner(boolean owner) {
-        this.isOwner = owner;
+    public void setRole(UserRole role) {
+        this.role = role;
     }
 }
