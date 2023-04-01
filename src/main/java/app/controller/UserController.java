@@ -23,15 +23,15 @@ public class UserController {
 
     //role: admin
     @PostMapping(path = "/add-owner", consumes = {"application/json"})
-    public ResponseEntity addOwner(@RequestBody final User user) {
-        this.userService.addNewOwner(user);
+    public ResponseEntity createOwner(@RequestBody final User user) {
+        this.userService.saveOwner(user);
         return new ResponseEntity<>("owner " + user.getUserId() + " created", HttpStatus.CREATED);
     }
 
     //role: owner
     @PostMapping(path = "/add-employee", consumes = {"application/json"})
-    public ResponseEntity addEmployee(@RequestBody final User user) {
-        this.userService.addNewEmployee(user);
+    public ResponseEntity createEmployee(@RequestBody final User user) {
+        this.userService.saveEmployee(user);
         return new ResponseEntity<>("employee " + user.getUserId() + " created", HttpStatus.CREATED);
     }
 
@@ -52,14 +52,14 @@ public class UserController {
     //role: admin
     @PutMapping(path = "/update-owner/{userId}", consumes = {"application/json"})
     public ResponseEntity modifyOwner(@PathVariable final Long userId, @RequestBody final UserEditForm user) {
-        this.userService.modifyOwner(userId, user);
+        this.userService.updateOwner(userId, user);
         return new ResponseEntity<>("owner " + userId + " updated", HttpStatus.OK);
     }
 
     //role: owner
     @PutMapping(path = "/update-employee/{userId}", consumes = {"application/json"})
     public ResponseEntity modifyEmployee(@PathVariable final Long userId, @RequestBody final UserEditForm user) {
-        this.userService.modifyEmployee(userId, user);
+        this.userService.updateEmployee(userId, user);
         return new ResponseEntity<>("employee " + userId + " updated", HttpStatus.OK);
     }
 

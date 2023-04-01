@@ -23,10 +23,10 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void addNewOwner(@RequestBody @NotNull User user) {
+    public void saveOwner(@RequestBody @NotNull User user) {
         final Optional<User> userByDni = this.userRepository.findByDni(user.getDni());
         if (userByDni.isEmpty()) {
-            if (user.getPassword().length() < 4)
+            if (user.getPassword().length() <= 4)
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, "password is too short");
             user.setRole(UserRole.OWNER);
             this.userRepository.save(user);
@@ -35,7 +35,8 @@ public class UserService {
         }
     }
 
-    public void addNewEmployee(@RequestBody @NotNull User user) {
+    //TODO add possibility to have employee and owner with same dni then fix test exception msg
+    public void saveEmployee(@RequestBody @NotNull User user) {
         final Optional<User> userByDni = this.userRepository.findByDni(user.getDni());
         if (userByDni.isEmpty()) {
             if (user.getPassword().length() > 4)
@@ -73,7 +74,7 @@ public class UserService {
         }
     }
 
-    public void modifyOwner(@NotNull Long userId, @NotNull UserEditForm userEditForm) {
+    public void updateOwner(@NotNull Long userId, @NotNull UserEditForm userEditForm) {
         final Optional<User> findUserById = this.userRepository.findById(userId);
         if (findUserById.isPresent()) {
             User userById = findUserById.get();
@@ -91,7 +92,7 @@ public class UserService {
         }
     }
 
-    public void modifyEmployee(@NotNull Long userId, @NotNull UserEditForm userEditForm) {
+    public void updateEmployee(@NotNull Long userId, @NotNull UserEditForm userEditForm) {
         final Optional<User> findUserById = this.userRepository.findById(userId);
         if (findUserById.isPresent()) {
             User userById = findUserById.get();

@@ -70,6 +70,10 @@ public class User {
         return this.password;
     }
 
+    public UserRole getRole(){
+        return this.role;
+    }
+
     public void setDni(String dni) {
         this.dni = dni;
     }
