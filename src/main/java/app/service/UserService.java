@@ -25,7 +25,7 @@ public class UserService {
 
     public void addNewOwner(@RequestBody @NotNull User user) {
         final Optional<User> userByDni = this.userRepository.findByDni(user.getDni());
-        if (!userByDni.isPresent()) {
+        if (userByDni.isEmpty()) {
             if (user.getPassword().length() < 4)
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, "password is too short");
             user.setRole(UserRole.OWNER);
@@ -37,7 +37,7 @@ public class UserService {
 
     public void addNewEmployee(@RequestBody @NotNull User user) {
         final Optional<User> userByDni = this.userRepository.findByDni(user.getDni());
-        if (!userByDni.isPresent()) {
+        if (userByDni.isEmpty()) {
             if (user.getPassword().length() > 4)
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, "PIN must be 4 digit");
             user.setRole(UserRole.EMPLOYEE);
@@ -74,10 +74,15 @@ public class UserService {
     }
 
     public void modifyOwner(@NotNull Long userId, @NotNull UserEditForm userEditForm) {
-        final Optional<User> userById = this.userRepository.findById(userId);
-        if (userById.isPresent()) {
-            if ((userById.get().isOwner())) {
-                this.userRepository.updateUserById(userId, userEditForm.getDni(), userEditForm.getFirstName(), userEditForm.getLastName(), userEditForm.getPassword());
+        final Optional<User> findUserById = this.userRepository.findById(userId);
+        if (findUserById.isPresent()) {
+            User userById = findUserById.get();
+            if ((userById.isOwner())) {
+                userById.setDni(userEditForm.getDni());
+                userById.setFirstName(userEditForm.getFirstName());
+                userById.setLastName(userEditForm.getLastName());
+                userById.setPassword(userEditForm.getPassword());
+                this.userRepository.save(userById);
             } else {
                 throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "user " + userId + " is not owner");
             }
@@ -87,10 +92,15 @@ public class UserService {
     }
 
     public void modifyEmployee(@NotNull Long userId, @NotNull UserEditForm userEditForm) {
-        final Optional<User> userById = this.userRepository.findById(userId);
-        if (userById.isPresent()) {
-            if (!(userById.get().isOwner())) {
-                this.userRepository.updateUserById(userId, userEditForm.getDni(), userEditForm.getFirstName(), userEditForm.getLastName(), userEditForm.getPassword());
+        final Optional<User> findUserById = this.userRepository.findById(userId);
+        if (findUserById.isPresent()) {
+            User userById = findUserById.get();
+            if (!(userById.isOwner())) {
+                userById.setDni(userEditForm.getDni());
+                userById.setFirstName(userEditForm.getFirstName());
+                userById.setLastName(userEditForm.getLastName());
+                userById.setPassword(userEditForm.getPassword());
+                this.userRepository.save(userById);
             } else {
                 throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "user " + userId + " is not employee");
             }
