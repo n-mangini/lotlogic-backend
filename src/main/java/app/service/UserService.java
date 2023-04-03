@@ -23,6 +23,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    //TODO add possibility to have employee and owner with same dni then fix test exception msg
     public void saveOwner(@RequestBody @NotNull User user) {
         final Optional<User> userByDni = this.userRepository.findByDni(user.getDni());
         if (userByDni.isEmpty()) {
