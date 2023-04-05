@@ -3,6 +3,7 @@ package app.service;
 import app.model.User;
 import app.model.UserRole;
 import app.model.form.UserEditForm;
+import app.model.form.UserLoginForm;
 import app.repository.UserRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
@@ -18,9 +19,19 @@ import java.util.Optional;
 @Component
 public class UserService {
     private final UserRepository userRepository;
+    private final JwtService jwtService;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, JwtService jwtService) {
         this.userRepository = userRepository;
+        this.jwtService = jwtService;
+    }
+
+    public String loginUser(@RequestBody @NotNull UserLoginForm user) {
+        final Optional<User> userData = this.userRepository.findUserByDniAndPassword(user.getDni(), user.getPassword());
+        if (userData.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user " + user.getDni() + " not found");
+        }
+        return this.jwtService.generateToken(user);
     }
 
     //TODO add possibility to have employee and owner with same dni then fix test exception msg

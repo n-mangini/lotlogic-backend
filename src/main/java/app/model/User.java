@@ -70,7 +70,7 @@ public class User {
         return this.password;
     }
 
-    public UserRole getRole(){
+    public UserRole getRole() {
         return this.role;
     }
 

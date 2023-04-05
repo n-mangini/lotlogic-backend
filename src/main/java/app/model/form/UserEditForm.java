@@ -6,7 +6,7 @@ public class UserEditForm {
     private String lastName;
     private String password;
 
-    public UserEditForm(){
+    public UserEditForm() {
 
     }
 

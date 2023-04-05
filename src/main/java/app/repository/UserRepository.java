@@ -18,4 +18,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u.userId, u.firstName, u.lastName FROM User u WHERE u.role = 'OWNER'")
     List<Object> findAllOwners();
+
+    Optional<User> findUserByDniAndPassword(String dni, String password);
 }
