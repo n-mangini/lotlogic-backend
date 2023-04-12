@@ -17,6 +17,8 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
 
 public class JwtFilter extends GenericFilterBean {
+
+    //TODO check for isTokenExpired
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         final HttpServletRequest request = (HttpServletRequest) servletRequest;
@@ -27,7 +29,7 @@ public class JwtFilter extends GenericFilterBean {
             filterChain.doFilter(request, response);
         } else {
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                throw new ServletException("An exception occurred");
+                throw new ServletException("An exception occurred with authentication");
             }
         }
         final String token = authHeader.substring(7);

@@ -2,7 +2,6 @@ package app.controller;
 
 import app.model.User;
 import app.model.form.UserEditForm;
-import app.model.form.UserLoginForm;
 import app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,12 +19,6 @@ public class UserController {
     @Autowired
     public UserController(final UserService userService) {
         this.userService = userService;
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody UserLoginForm user) {
-        String token = this.userService.loginUser(user);
-        return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
     //role: admin
