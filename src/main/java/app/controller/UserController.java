@@ -72,11 +72,11 @@ public class UserController {
 
     @GetMapping(path = "panel-employee")
     public List<Object> getAllEmployees() {
-        return this.userService.findAllEmployees();
+        return this.userService.getAllEmployees();
     }
 
     @GetMapping(path = "panel-owner")
     public List<Object> getAllOwners() {
-        return this.userService.findAllOwners();
+        return this.userService.getAllOwners();
     }
 }

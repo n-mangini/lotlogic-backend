@@ -31,10 +31,11 @@ public class UserService {
         if (userData.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user " + user.getDni() + " not found");
         }
-        return this.jwtService.generateToken(user);
+        return this.jwtService.generateToken(user, getUserRoleById(user.getDni()));
     }
 
     //TODO add possibility to have employee and owner with same dni then fix test exception msg
+
     public void saveOwner(@RequestBody @NotNull User user) {
         final Optional<User> userByDni = this.userRepository.findByDni(user.getDni());
         if (userByDni.isEmpty()) {
@@ -46,8 +47,8 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "owner with DNI " + userByDni.get().getDni() + " already exists");
         }
     }
-
     //TODO add possibility to have employee and owner with same dni then fix test exception msg
+
     public void saveEmployee(@RequestBody @NotNull User user) {
         final Optional<User> userByDni = this.userRepository.findByDni(user.getDni());
         if (userByDni.isEmpty()) {
@@ -122,11 +123,15 @@ public class UserService {
         }
     }
 
-    public List<Object> findAllEmployees() {
+    private String getUserRoleById(String dni) {
+        return this.userRepository.findRoleById(dni);
+    }
+
+    public List<Object> getAllEmployees() {
         return this.userRepository.findAllEmployees();
     }
 
-    public List<Object> findAllOwners() {
+    public List<Object> getAllOwners() {
         return this.userRepository.findAllOwners();
     }
 }
