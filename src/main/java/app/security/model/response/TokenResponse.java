@@ -1,4 +1,4 @@
-package app.model.response;
+package app.security.model.response;
 
 public class TokenResponse {
     private String token;

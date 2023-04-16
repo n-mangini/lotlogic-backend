@@ -1,6 +1,6 @@
-package app.controller;
+package app.security.auth;
 
-import app.model.response.TokenResponse;
+import app.security.model.response.TokenResponse;
 import app.model.form.UserLoginForm;
 import app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,6 @@ public class AuthController {
         this.userService = userService;
     }
 
-    //TODO fix String response to JSON format
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody UserLoginForm user) {
         String token = this.userService.loginUser(user);

@@ -5,6 +5,7 @@ import app.model.UserRole;
 import app.model.form.UserEditForm;
 import app.model.form.UserLoginForm;
 import app.repository.UserRepository;
+import app.security.config.JwtService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
