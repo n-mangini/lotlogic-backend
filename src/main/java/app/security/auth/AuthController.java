@@ -1,5 +1,6 @@
 package app.security.auth;
 
+import app.security.model.response.LoginResponse;
 import app.security.model.response.TokenResponse;
 import app.model.form.UserLoginForm;
 import app.service.UserService;
@@ -22,6 +23,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody UserLoginForm user) {
         String token = this.userService.loginUser(user);
-        return new ResponseEntity<>(new TokenResponse(token), HttpStatus.OK);
+        String firstName = this.userService.getUserByDni(user.getDni()).getFirstName();
+        return new ResponseEntity<>(new LoginResponse(new TokenResponse(token), firstName), HttpStatus.OK);
     }
 }

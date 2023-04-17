@@ -128,6 +128,14 @@ public class UserService {
         return this.userRepository.findRoleById(dni);
     }
 
+    public User getUserByDni(String dni) {
+        Optional<User> userOptional = this.userRepository.findByDni(dni);
+        if (userOptional.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user " + dni + " not found");
+        }
+        return userOptional.get();
+    }
+
     public List<Object> getAllEmployees() {
         return this.userRepository.findAllEmployees();
     }
