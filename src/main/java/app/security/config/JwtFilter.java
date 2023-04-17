@@ -27,6 +27,9 @@ public class JwtFilter extends GenericFilterBean {
         final HttpServletRequest request = (HttpServletRequest) servletRequest;
         final HttpServletResponse response = (HttpServletResponse) servletResponse;
         final String authHeader = request.getHeader("authorization");
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
+        response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
 
         if ("OPTIONS".equals(request.getMethod()) || request.getServletPath().contains("/api/auth/*")) {
             response.setStatus(HttpServletResponse.SC_OK);
