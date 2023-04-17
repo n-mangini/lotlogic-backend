@@ -46,6 +46,12 @@ public class User {
         this.password = password;
     }
 
+    public User(String dni, String password, UserRole role) {
+        this.dni = dni;
+        this.password = password;
+        this.role = role;
+    }
+
     public boolean isOwner() {
         return this.role.equals(UserRole.OWNER);
     }

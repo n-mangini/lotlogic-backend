@@ -1,5 +1,6 @@
 package app.security.config;
 
+import app.model.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
@@ -27,20 +28,32 @@ public class JwtFilter extends GenericFilterBean {
         final HttpServletResponse response = (HttpServletResponse) servletResponse;
         final String authHeader = request.getHeader("authorization");
 
-        if ("OPTIONS".equals(request.getMethod()) || request.getServletPath().contains("/api/auth/login")) {
+        if ("OPTIONS".equals(request.getMethod()) || request.getServletPath().contains("/api/auth/*")) {
             response.setStatus(HttpServletResponse.SC_OK);
             filterChain.doFilter(request, response);
+            return;
         }
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             throw new ServletException("An exception occurred with authentication");
         }
         final String token = authHeader.substring(7);
+        String role = this.jwtService.extractRole(token);
+
         if (this.jwtService.isTokenExpired(token)) {
             throw new ServletException("Expired token");
         }
         Claims claims = Jwts.parser().setSigningKey(this.jwtService.getSignInKey()).parseClaimsJws(token).getBody();
         request.setAttribute("claims", claims);
         request.setAttribute("blog", servletRequest.getParameter("id"));
-        filterChain.doFilter(request, response);
+
+        if (role.equals(UserRole.ADMIN.toString())) {
+            filterChain.doFilter(request, response);
+        } else if (role.equals(UserRole.OWNER.toString()) && request.getServletPath().startsWith("/api/user/owner")) {
+            filterChain.doFilter(request, response);
+        } else if (role.equals(UserRole.EMPLOYEE.toString()) && request.getServletPath().startsWith("/api/user/employee")) {
+            filterChain.doFilter(request, response);
+        } else {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have sufficient privileges to perform this operation.");
+        }
     }
 }
