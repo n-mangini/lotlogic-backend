@@ -3,6 +3,7 @@ package app.model;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -29,10 +30,11 @@ public class Parking {
     @OneToMany
     private List<Floor> floors;
 
-    @ManyToMany
-    private List<User> users;
+    @Column
+    private boolean active = true;
 
     public Parking() {
+
     }
 
     public Parking(long parkingId, String address, int carFee, int motorbikeFee, int truckFee) {
@@ -41,6 +43,7 @@ public class Parking {
         this.carFee = carFee;
         this.motorbikeFee = motorbikeFee;
         this.truckFee = truckFee;
+        this.floors = new ArrayList<>();
     }
 
     public Parking(String address, int carFee, int motorbikeFee, int truckFee) {
@@ -48,61 +51,62 @@ public class Parking {
         this.carFee = carFee;
         this.motorbikeFee = motorbikeFee;
         this.truckFee = truckFee;
+        this.floors = new ArrayList<>();
     }
 
     public long getParkingId() {
         return this.parkingId;
     }
 
-    public void setParkingId(long parkingId) {
-        this.parkingId = parkingId;
-    }
-
     public String getAddress() {
         return this.address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public int getCarFee() {
-        return this.carFee;
-    }
-
-    public void setCarFee(int carFee) {
-        this.carFee = carFee;
-    }
-
-    public int getMotorbikeFee() {
-        return this.motorbikeFee;
-    }
-
-    public void setMotorbikeFee(int motorbikeFee) {
-        this.motorbikeFee = motorbikeFee;
-    }
-
-    public int getTruckFee() {
-        return this.truckFee;
-    }
-
-    public void setTruckFee(int truckFee) {
-        this.truckFee = truckFee;
     }
 
     public List<Floor> getFloors() {
         return this.floors;
     }
 
+    public int getCarFee() {
+        return this.carFee;
+    }
+
+    public int getMotorbikeFee() {
+        return this.motorbikeFee;
+    }
+
+    public int getTruckFee() {
+        return this.truckFee;
+    }
+
+    public boolean isActive() {
+        return this.active;
+    }
+
+    public void setParkingId(long parkingId) {
+        this.parkingId = parkingId;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setCarFee(int carFee) {
+        this.carFee = carFee;
+    }
+
+    public void setMotorbikeFee(int motorbikeFee) {
+        this.motorbikeFee = motorbikeFee;
+    }
+
+    public void setTruckFee(int truckFee) {
+        this.truckFee = truckFee;
+    }
+
     public void setFloors(List<Floor> floors) {
         this.floors = floors;
     }
 
-    public List<User> getUsers() {
-        return this.users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

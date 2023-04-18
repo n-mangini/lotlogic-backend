@@ -64,7 +64,7 @@ public class UserService {
 
     public void deleteOwner(@NotNull Long userId) {
         final Optional<User> userOptional = this.userRepository.findById(userId);
-        if (userOptional.isPresent()) {
+        if (userOptional.isPresent() && userOptional.get().isActive()) {
             User userById = userOptional.get();
             if (userById.getRole().equals(UserRole.OWNER)) {
                 userById.setActive(false);
@@ -79,7 +79,7 @@ public class UserService {
 
     public void deleteEmployee(@NotNull Long userId) {
         final Optional<User> userOptional = this.userRepository.findById(userId);
-        if (userOptional.isPresent()) {
+        if (userOptional.isPresent() && userOptional.get().isActive()) {
             User userById = userOptional.get();
             if (userById.getRole().equals(UserRole.EMPLOYEE)) {
                 userById.setActive(false);

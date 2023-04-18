@@ -1,9 +1,7 @@
 package app.controller;
 
-import app.model.Parking;
 import app.model.User;
 import app.model.form.UserEditForm;
-import app.service.ParkingService;
 import app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,12 +15,10 @@ import java.util.List;
 @RequestMapping(path = "/api/user/admin")
 public class AdminController {
     private final UserService userService;
-    private final ParkingService parkingService;
 
     @Autowired
-    public AdminController(final UserService userService, final ParkingService parkingService) {
+    public AdminController(final UserService userService) {
         this.userService = userService;
-        this.parkingService = parkingService;
     }
 
     @PostMapping(path = "/add-owner", consumes = {"application/json"})
@@ -51,11 +47,5 @@ public class AdminController {
     @GetMapping(path = "panel-owner")
     public List<Object> getAllOwners() {
         return this.userService.getAllOwners();
-    }
-
-    @PostMapping(path = "/add-parking", consumes = {"application/json"})
-    public ResponseEntity<?> createParking(@RequestBody final Parking parking) {
-        this.parkingService.saveParking(parking);
-        return new ResponseEntity<>("parking " + parking.getAddress() + " created", HttpStatus.CREATED);
     }
 }

@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name = "floor")
+@Table
 public class Floor {
     @Id
     @GeneratedValue(generator = "increment")
@@ -14,4 +14,45 @@ public class Floor {
 
     @Column
     private int slotsNumber;
+
+    @Column
+    private boolean isEnabled;
+
+    public Floor() {
+    }
+
+    public Floor(long floorId, int slotsNumber) {
+        this.floorId = floorId;
+        this.slotsNumber = slotsNumber;
+        this.isEnabled = true;
+    }
+
+    public Floor(int slotsNumber) {
+        this.slotsNumber = slotsNumber;
+        this.isEnabled = true;
+    }
+
+    public long getFloorId() {
+        return this.floorId;
+    }
+
+    public void setFloorId(long floorId) {
+        this.floorId = floorId;
+    }
+
+    public int getSlotsNumber() {
+        return this.slotsNumber;
+    }
+
+    public void setSlotsNumber(int slotsNumber) {
+        this.slotsNumber = slotsNumber;
+    }
+
+    public boolean isEnabled() {
+        return this.isEnabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.isEnabled = enabled;
+    }
 }
