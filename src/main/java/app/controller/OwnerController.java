@@ -1,5 +1,6 @@
 package app.controller;
 
+import app.model.Parking;
 import app.model.User;
 import app.model.form.ParkingAddForm;
 import app.model.form.ParkingEditForm;
@@ -62,8 +63,14 @@ public class OwnerController {
         return new ResponseEntity<>("parking " + parkingId + " updated", HttpStatus.OK);
     }
 
+    @GetMapping(path = "panel-parkings")
+    public List<Parking> getAllParkings(){
+        return this.parkingService.getAllParkings();
+    }
+
     //TODO owner should get() from specific parking
     @GetMapping(path = "panel-employee")
+
     public List<Object> getAllEmployees() {
         return this.userService.getAllEmployees();
     }
