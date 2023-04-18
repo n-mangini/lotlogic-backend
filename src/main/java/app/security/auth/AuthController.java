@@ -1,5 +1,7 @@
 package app.security.auth;
 
+import app.model.UserRole;
+import app.security.config.JwtService;
 import app.security.model.response.LoginResponse;
 import app.security.model.response.TokenResponse;
 import app.model.form.UserLoginForm;
@@ -14,16 +16,20 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/api/auth")
 public class AuthController {
     private final UserService userService;
+    private final JwtService jwtService;
 
     @Autowired
-    public AuthController(final UserService userService) {
+    public AuthController(final UserService userService, JwtService jwtService) {
         this.userService = userService;
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody UserLoginForm user) {
         String token = this.userService.loginUser(user);
-        String firstName = this.userService.getUserByDni(user.getDni()).getFirstName();
-        return new ResponseEntity<>(new LoginResponse(new TokenResponse(token), firstName), HttpStatus.OK);
+        String firstName = this.userService.getUserByDni(this.jwtService.extractDni(token)).getFirstName();
+        String lastName = this.userService.getUserByDni(this.jwtService.extractDni(token)).getLastName();
+        String role = this.jwtService.extractRole(token);
+        return new ResponseEntity<>(new LoginResponse(new TokenResponse(token), firstName, lastName, role), HttpStatus.OK);
     }
 }

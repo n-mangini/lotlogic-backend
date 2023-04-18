@@ -1,12 +1,8 @@
 package app.model.form;
 
 public class UserLoginForm {
-    private String dni;
-    private String password;
-
-    public UserLoginForm() {
-
-    }
+    private final String dni;
+    private final String password;
 
     public UserLoginForm(String dni, String password) {
         this.dni = dni;
@@ -19,13 +15,5 @@ public class UserLoginForm {
 
     public String getPassword() {
         return this.password;
-    }
-
-    public void setDni(String dni) {
-        this.dni = dni;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }

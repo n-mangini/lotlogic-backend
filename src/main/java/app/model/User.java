@@ -3,6 +3,8 @@ package app.model;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.List;
+
 @Entity
 @Table(name = "user")
 public class User {
@@ -28,6 +30,12 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+    @ManyToMany
+    private List<Parking> parkings;
+
+    @Column
+    private boolean active = true;
+
     public User() {
     }
 
@@ -50,10 +58,6 @@ public class User {
         this.dni = dni;
         this.password = password;
         this.role = role;
-    }
-
-    public boolean isOwner() {
-        return this.role.equals(UserRole.OWNER);
     }
 
     public Long getUserId() {
@@ -80,6 +84,14 @@ public class User {
         return this.role;
     }
 
+    public List<Parking> getParkings() {
+        return this.parkings;
+    }
+
+    public boolean isActive() {
+        return this.active;
+    }
+
     public void setDni(String dni) {
         this.dni = dni;
     }
@@ -98,5 +110,9 @@ public class User {
 
     public void setRole(UserRole role) {
         this.role = role;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

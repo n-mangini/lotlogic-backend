@@ -63,10 +63,12 @@ public class UserService {
     }
 
     public void deleteOwner(@NotNull Long userId) {
-        final Optional<User> userById = this.userRepository.findById(userId);
-        if (userById.isPresent()) {
-            if (userById.get().isOwner()) {
-                this.userRepository.deleteById(userId);
+        final Optional<User> userOptional = this.userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            User userById = userOptional.get();
+            if (userById.getRole().equals(UserRole.OWNER)) {
+                userById.setActive(false);
+                this.userRepository.save(userById);
             } else {
                 throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "user " + userId + " is not owner");
             }
@@ -76,10 +78,12 @@ public class UserService {
     }
 
     public void deleteEmployee(@NotNull Long userId) {
-        final Optional<User> userById = this.userRepository.findById(userId);
-        if (userById.isPresent()) {
-            if (!(userById.get().isOwner())) {
-                this.userRepository.deleteById(userId);
+        final Optional<User> userOptional = this.userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            User userById = userOptional.get();
+            if (userById.getRole().equals(UserRole.EMPLOYEE)) {
+                userById.setActive(false);
+                this.userRepository.save(userById);
             } else {
                 throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "user " + userId + " is not employee");
             }
@@ -92,7 +96,7 @@ public class UserService {
         final Optional<User> findUserById = this.userRepository.findById(userId);
         if (findUserById.isPresent()) {
             User userById = findUserById.get();
-            if ((userById.isOwner())) {
+            if ((userById.getRole().equals(UserRole.OWNER))) {
                 userById.setDni(userEditForm.getDni());
                 userById.setFirstName(userEditForm.getFirstName());
                 userById.setLastName(userEditForm.getLastName());
@@ -110,7 +114,7 @@ public class UserService {
         final Optional<User> findUserById = this.userRepository.findById(userId);
         if (findUserById.isPresent()) {
             User userById = findUserById.get();
-            if (!(userById.isOwner())) {
+            if (userById.getRole().equals(UserRole.EMPLOYEE)) {
                 userById.setDni(userEditForm.getDni());
                 userById.setFirstName(userEditForm.getFirstName());
                 userById.setLastName(userEditForm.getLastName());
