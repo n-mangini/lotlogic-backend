@@ -13,8 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ParkingService {
@@ -28,18 +27,18 @@ public class ParkingService {
         this.userRepository = userRepository;
     }
 
-    public void saveParking(@RequestBody @NotNull ParkingAddForm parking) {
-        Optional<Parking> parkingOptional = this.parkingRepository.findByAddress(parking.getAddress());
+    public void saveParking(@RequestBody @NotNull ParkingAddForm parkingAddForm) {
+        Optional<Parking> parkingOptional = this.parkingRepository.findByAddress(parkingAddForm.getAddress());
         if (parkingOptional.isEmpty()) {
-            if (parking.getDni() == null)
+            if (parkingAddForm.getDni() == null)
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "parking should be assigned to user");
-            Parking parkingToSave = new Parking(parking.getAddress(), parking.getCarFee(), parking.getMotorbikeFee(), parking.getTruckFee());
-            this.floorRepository.saveAll(parking.getFloors());
-            parking.getFloors().forEach(floor -> parkingToSave.getFloors().add(floor));
+            Parking parkingToSave = new Parking(parkingAddForm.getAddress(), parkingAddForm.getCarFee(), parkingAddForm.getMotorbikeFee(), parkingAddForm.getTruckFee());
+            this.floorRepository.saveAll(parkingAddForm.getFloors());
+            parkingAddForm.getFloors().forEach(floor -> parkingToSave.getFloors().add(floor));
             this.parkingRepository.save(parkingToSave);
-            assignParkingToUser(parking.getDni(), parkingToSave);
+            assignParkingToUser(parkingAddForm.getDni(), parkingToSave);
         } else {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "parking " + parking.getAddress() + " already exists");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "parking " + parkingAddForm.getAddress() + " already exists");
         }
     }
 
@@ -65,22 +64,19 @@ public class ParkingService {
         }
     }
 
-    //TODO modify floors and slots
+    //TODO modify floors, slots and fees [modify arrays with json]
     public void updateParking(@NotNull Long parkingId, @NotNull ParkingEditForm parkingEditForm) {
         final Optional<Parking> parkingOptional = this.parkingRepository.findById(parkingId);
         if (parkingOptional.isPresent()) {
             Parking parkingById = parkingOptional.get();
             parkingById.setAddress(parkingEditForm.getAddress());
-            parkingById.setCarFee(parkingEditForm.getCarFee());
-            parkingById.setMotorbikeFee(parkingEditForm.getMotorbikeFee());
-            parkingById.setTruckFee(parkingEditForm.getTruckFee());
             this.parkingRepository.save(parkingById);
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "parking " + parkingId + " not found");
         }
     }
 
-    public List<Parking> getAllParkings(){
+    public List<Parking> getAllParkings() {
         return this.parkingRepository.findAllParkings();
     }
 }

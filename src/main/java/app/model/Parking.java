@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "parking")
+@Table
 public class Parking {
     @Id
     @GeneratedValue(generator = "increment")
@@ -29,6 +29,9 @@ public class Parking {
 
     @OneToMany
     private List<Floor> floors;
+
+    @OneToMany
+    private List<FeeType> fees;
 
     @Column
     private boolean active = true;
