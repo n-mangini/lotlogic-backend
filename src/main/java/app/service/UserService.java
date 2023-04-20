@@ -39,7 +39,7 @@ public class UserService {
 
     public void saveOwner(@RequestBody @NotNull User user) {
         final Optional<User> userByDni = this.userRepository.findByDni(user.getDni());
-        if (userByDni.isEmpty()) {
+        if (userByDni.isEmpty() || !userByDni.get().isActive()) {
             if (user.getPassword().length() <= 4)
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, "password is too short");
             user.setRole(UserRole.OWNER);
@@ -52,7 +52,7 @@ public class UserService {
 
     public void saveEmployee(@RequestBody @NotNull User user) {
         final Optional<User> userByDni = this.userRepository.findByDni(user.getDni());
-        if (userByDni.isEmpty()) {
+        if (userByDni.isEmpty() || !userByDni.get().isActive()) {
             if (user.getPassword().length() > 4)
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, "PIN must be 4 digit");
             user.setRole(UserRole.EMPLOYEE);

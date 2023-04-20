@@ -1,9 +1,12 @@
 package app.service;
 
+import app.model.Fee;
+import app.model.Floor;
 import app.model.Parking;
 import app.model.User;
 import app.model.form.ParkingAddForm;
 import app.model.form.ParkingEditForm;
+import app.repository.FeeRepository;
 import app.repository.FloorRepository;
 import app.repository.ParkingRepository;
 import app.repository.UserRepository;
@@ -18,23 +21,34 @@ import java.util.*;
 @Service
 public class ParkingService {
     private final ParkingRepository parkingRepository;
+    private final FeeRepository feeRepository;
     private final FloorRepository floorRepository;
     private final UserRepository userRepository;
 
-    public ParkingService(ParkingRepository parkingRepository, FloorRepository floorRepository, UserRepository userRepository) {
+    public ParkingService(ParkingRepository parkingRepository, FeeRepository feeRepository, FloorRepository floorRepository, UserRepository userRepository) {
         this.parkingRepository = parkingRepository;
+        this.feeRepository = feeRepository;
         this.floorRepository = floorRepository;
         this.userRepository = userRepository;
     }
 
     public void saveParking(@RequestBody @NotNull ParkingAddForm parkingAddForm) {
         Optional<Parking> parkingOptional = this.parkingRepository.findByAddress(parkingAddForm.getAddress());
-        if (parkingOptional.isEmpty()) {
+        if (parkingOptional.isEmpty() || !parkingOptional.get().isActive()) {
             if (parkingAddForm.getDni() == null)
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "parking should be assigned to user");
-            Parking parkingToSave = new Parking(parkingAddForm.getAddress(), parkingAddForm.getCarFee(), parkingAddForm.getMotorbikeFee(), parkingAddForm.getTruckFee());
+            Parking parkingToSave = new Parking(parkingAddForm.getAddress());
+
+            //add floor
+            List<Floor> floors = parkingToSave.getFloors();
             this.floorRepository.saveAll(parkingAddForm.getFloors());
             parkingAddForm.getFloors().forEach(floor -> parkingToSave.getFloors().add(floor));
+
+            //add fee
+            List<Fee> fees = parkingAddForm.getFees();
+            this.feeRepository.saveAll(fees);
+            parkingAddForm.getFees().forEach(fee -> parkingToSave.getFees().add(fee));
+
             this.parkingRepository.save(parkingToSave);
             assignParkingToUser(parkingAddForm.getDni(), parkingToSave);
         } else {
@@ -70,6 +84,8 @@ public class ParkingService {
         if (parkingOptional.isPresent()) {
             Parking parkingById = parkingOptional.get();
             parkingById.setAddress(parkingEditForm.getAddress());
+            parkingById.setFloors(parkingEditForm.getFloors());
+            parkingById.setFees(parkingEditForm.getFees());
             this.parkingRepository.save(parkingById);
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "parking " + parkingId + " not found");

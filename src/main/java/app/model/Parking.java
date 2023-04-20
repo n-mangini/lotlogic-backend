@@ -18,20 +18,11 @@ public class Parking {
     @Column
     private String address;
 
-    @Column
-    private int carFee;
-
-    @Column
-    private int motorbikeFee;
-
-    @Column
-    private int truckFee;
-
     @OneToMany
     private List<Floor> floors;
 
     @OneToMany
-    private List<FeeType> fees;
+    private List<Fee> fees;
 
     @Column
     private boolean active = true;
@@ -40,21 +31,17 @@ public class Parking {
 
     }
 
-    public Parking(long parkingId, String address, int carFee, int motorbikeFee, int truckFee) {
+    public Parking(long parkingId, String address) {
         this.parkingId = parkingId;
         this.address = address;
-        this.carFee = carFee;
-        this.motorbikeFee = motorbikeFee;
-        this.truckFee = truckFee;
         this.floors = new ArrayList<>();
+        this.fees = new ArrayList<>();
     }
 
-    public Parking(String address, int carFee, int motorbikeFee, int truckFee) {
+    public Parking(String address) {
         this.address = address;
-        this.carFee = carFee;
-        this.motorbikeFee = motorbikeFee;
-        this.truckFee = truckFee;
         this.floors = new ArrayList<>();
+        this.fees = new ArrayList<>();
     }
 
     public long getParkingId() {
@@ -69,16 +56,8 @@ public class Parking {
         return this.floors;
     }
 
-    public int getCarFee() {
-        return this.carFee;
-    }
-
-    public int getMotorbikeFee() {
-        return this.motorbikeFee;
-    }
-
-    public int getTruckFee() {
-        return this.truckFee;
+    public List<Fee> getFees() {
+        return this.fees;
     }
 
     public boolean isActive() {
@@ -93,20 +72,12 @@ public class Parking {
         this.address = address;
     }
 
-    public void setCarFee(int carFee) {
-        this.carFee = carFee;
-    }
-
-    public void setMotorbikeFee(int motorbikeFee) {
-        this.motorbikeFee = motorbikeFee;
-    }
-
-    public void setTruckFee(int truckFee) {
-        this.truckFee = truckFee;
-    }
-
     public void setFloors(List<Floor> floors) {
         this.floors = floors;
+    }
+
+    public void setFees(List<Fee> fees) {
+        this.fees = fees;
     }
 
     public void setActive(boolean active) {

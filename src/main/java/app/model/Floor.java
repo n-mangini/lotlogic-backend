@@ -16,7 +16,7 @@ public class Floor {
     private int slotsNumber;
 
     @Column
-    private boolean isEnabled;
+    private boolean isEnabled = true;
 
     public Floor() {
     }
@@ -24,12 +24,10 @@ public class Floor {
     public Floor(long floorId, int slotsNumber) {
         this.floorId = floorId;
         this.slotsNumber = slotsNumber;
-        this.isEnabled = true;
     }
 
     public Floor(int slotsNumber) {
         this.slotsNumber = slotsNumber;
-        this.isEnabled = true;
     }
 
     public long getFloorId() {
