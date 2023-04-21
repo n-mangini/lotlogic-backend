@@ -2,9 +2,9 @@ package app.controller;
 
 import app.model.Parking;
 import app.model.User;
-import app.model.form.ParkingAddForm;
-import app.model.form.ParkingEditForm;
-import app.model.form.UserEditForm;
+import app.model.dto.ParkingAddForm;
+import app.model.dto.ParkingEditForm;
+import app.model.dto.UserEditForm;
 import app.service.ParkingService;
 import app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +48,7 @@ public class OwnerController {
     @PostMapping(path = "/add-parking", consumes = {"application/json"})
     public ResponseEntity<?> createParking(@RequestBody final ParkingAddForm parking) {
         this.parkingService.saveParking(parking);
-        return new ResponseEntity<>("parking " + parking.getAddress() + " created and assigned to user " + parking.getDni(), HttpStatus.CREATED);
+        return new ResponseEntity<>("parking " + parking.address() + " created and assigned to user " + parking.dni(), HttpStatus.CREATED);
     }
 
     @DeleteMapping(path = "/delete-parking/{parkingId}")
@@ -69,12 +69,12 @@ public class OwnerController {
     }
 
     @GetMapping(path = "panel-employee")
-    public List<Object> getAllEmployees() {
+    public List<User> getAllEmployees() {
         return this.userService.getAllEmployees();
     }
 
     @GetMapping(path = "panel-owner")
-    public List<Object> getAllOwners() {
+    public List<User> getAllOwners() {
         return this.userService.getAllOwners();
     }
 }

@@ -2,10 +2,8 @@ package app.service;
 
 import app.model.Parking;
 import app.model.User;
-import app.model.form.ParkingAddForm;
-import app.model.form.ParkingEditForm;
-import app.repository.FeeRepository;
-import app.repository.FloorRepository;
+import app.model.dto.ParkingAddForm;
+import app.model.dto.ParkingEditForm;
 import app.repository.ParkingRepository;
 import app.repository.UserRepository;
 import org.jetbrains.annotations.NotNull;
@@ -27,17 +25,17 @@ public class ParkingService {
     }
 
     public void saveParking(@RequestBody @NotNull ParkingAddForm parkingAddForm) {
-        Optional<Parking> parkingOptional = this.parkingRepository.findByAddress(parkingAddForm.getAddress());
+        Optional<Parking> parkingOptional = this.parkingRepository.findByAddress(parkingAddForm.address());
         if (parkingOptional.isPresent() && parkingOptional.get().isActive())
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "parking " + parkingAddForm.getAddress() + " already exists");
-        if (parkingAddForm.getDni() == null)
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "parking " + parkingAddForm.address() + " already exists");
+        if (parkingAddForm.dni() == null)
             throw new ResponseStatusException(HttpStatus.CONFLICT, "parking should be created by an user");
-        final Optional<User> userOptional = this.userRepository.findByDni(parkingAddForm.getDni());
+        final Optional<User> userOptional = this.userRepository.findByDni(parkingAddForm.dni());
         if (userOptional.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user " + parkingAddForm.getDni() + " not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user " + parkingAddForm.dni() + " not found");
         } else {
             User user = userOptional.get();
-            Parking parking = new Parking(parkingAddForm.getAddress(), parkingAddForm.getFloors(), parkingAddForm.getFees());
+            Parking parking = new Parking(parkingAddForm.address(), parkingAddForm.floors(), parkingAddForm.fees());
             user.getParkings().add(parking);
             this.userRepository.save(user);
         }
@@ -56,7 +54,7 @@ public class ParkingService {
 
     //TODO check if parking is updated only by the owner or Admin
     public void updateParking(@NotNull Long parkingId, @NotNull ParkingEditForm parkingEditForm) {
-        final Optional<User> userOptional = this.userRepository.findByDni(parkingEditForm.getDni());
+        final Optional<User> userOptional = this.userRepository.findByDni(parkingEditForm.dni());
         if (userOptional.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user " + parkingId + " not found");
         }
@@ -68,9 +66,9 @@ public class ParkingService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "parking " + parkingId + " not found");
         }
         Parking parkingById = parkingOptional.get();
-        parkingById.setAddress(parkingEditForm.getAddress());
-        parkingById.setFloors(parkingEditForm.getFloors());
-        parkingById.setFees(parkingEditForm.getFees());
+        parkingById.setAddress(parkingEditForm.address());
+        parkingById.setFloors(parkingEditForm.floors());
+        parkingById.setFees(parkingEditForm.fees());
         this.parkingRepository.save(parkingById);
     }
 

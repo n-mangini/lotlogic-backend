@@ -1,7 +1,7 @@
 package app.controller;
 
 import app.model.User;
-import app.model.form.UserEditForm;
+import app.model.dto.UserEditForm;
 import app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,12 +40,12 @@ public class AdminController {
     }
 
     @GetMapping(path = "panel-employee")
-    public List<Object> getAllEmployees() {
+    public List<User> getAllEmployees() {
         return this.userService.getAllEmployees();
     }
 
     @GetMapping(path = "panel-owner")
-    public List<Object> getAllOwners() {
+    public List<User> getAllOwners() {
         return this.userService.getAllOwners();
     }
 }

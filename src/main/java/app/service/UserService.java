@@ -2,8 +2,8 @@ package app.service;
 
 import app.model.User;
 import app.model.UserRole;
-import app.model.form.UserEditForm;
-import app.model.form.UserLoginForm;
+import app.model.dto.UserEditForm;
+import app.model.dto.UserLoginForm;
 import app.repository.UserRepository;
 import app.security.config.JwtService;
 import org.jetbrains.annotations.NotNull;
@@ -28,11 +28,11 @@ public class UserService {
     }
 
     public String loginUser(@RequestBody @NotNull UserLoginForm user) {
-        final Optional<User> userData = this.userRepository.findUserByDniAndPassword(user.getDni(), user.getPassword());
+        final Optional<User> userData = this.userRepository.findUserByDniAndPassword(user.dni(), user.password());
         if (userData.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user " + user.getDni() + " not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user " + user.dni() + " not found");
         }
-        return this.jwtService.generateToken(user, getUserRoleById(user.getDni()));
+        return this.jwtService.generateToken(user, getUserRoleById(user.dni()));
     }
 
     //TODO add possibility to have employee and owner with same dni then fix test exception msg
@@ -97,10 +97,10 @@ public class UserService {
         if (findUserById.isPresent()) {
             User userById = findUserById.get();
             if ((userById.getRole().equals(UserRole.OWNER))) {
-                userById.setDni(userEditForm.getDni());
-                userById.setFirstName(userEditForm.getFirstName());
-                userById.setLastName(userEditForm.getLastName());
-                userById.setPassword(userEditForm.getPassword());
+                userById.setDni(userEditForm.dni());
+                userById.setFirstName(userEditForm.firstName());
+                userById.setLastName(userEditForm.lastName());
+                userById.setPassword(userEditForm.password());
                 this.userRepository.save(userById);
             } else {
                 throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "user " + userId + " is not owner");
@@ -115,10 +115,10 @@ public class UserService {
         if (findUserById.isPresent()) {
             User userById = findUserById.get();
             if (userById.getRole().equals(UserRole.EMPLOYEE)) {
-                userById.setDni(userEditForm.getDni());
-                userById.setFirstName(userEditForm.getFirstName());
-                userById.setLastName(userEditForm.getLastName());
-                userById.setPassword(userEditForm.getPassword());
+                userById.setDni(userEditForm.dni());
+                userById.setFirstName(userEditForm.firstName());
+                userById.setLastName(userEditForm.lastName());
+                userById.setPassword(userEditForm.password());
                 this.userRepository.save(userById);
             } else {
                 throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "user " + userId + " is not employee");
@@ -140,11 +140,11 @@ public class UserService {
         return userOptional.get();
     }
 
-    public List<Object> getAllEmployees() {
+    public List<User> getAllEmployees() {
         return this.userRepository.findAllEmployees();
     }
 
-    public List<Object> getAllOwners() {
+    public List<User> getAllOwners() {
         return this.userRepository.findAllOwners();
     }
 }

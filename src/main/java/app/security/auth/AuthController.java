@@ -1,10 +1,9 @@
 package app.security.auth;
 
-import app.model.UserRole;
 import app.security.config.JwtService;
 import app.security.model.response.LoginResponse;
 import app.security.model.response.TokenResponse;
-import app.model.form.UserLoginForm;
+import app.model.dto.UserLoginForm;
 import app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

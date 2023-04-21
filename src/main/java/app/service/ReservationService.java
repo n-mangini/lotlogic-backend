@@ -3,7 +3,7 @@ package app.service;
 import app.model.Parking;
 import app.model.Reservation;
 import app.model.User;
-import app.model.form.ReservationAddForm;
+import app.model.dto.ReservationAddForm;
 import app.repository.ParkingRepository;
 import app.repository.ReservationRepository;
 import app.repository.UserRepository;
@@ -26,12 +26,12 @@ public class ReservationService {
     }
 
     public void saveReservation(ReservationAddForm reservationAddForm) {
-        if (reservationAddForm.getParkingId() == null || reservationAddForm.getDni() == null)
+        if (reservationAddForm.parkingId() == null || reservationAddForm.dni() == null)
             throw new ResponseStatusException(HttpStatus.CONFLICT, "reservation should be assigned to parking and user");
-        Reservation reservationToSave = new Reservation(reservationAddForm.getEntryDate(), reservationAddForm.getExitDate(), reservationAddForm.getCarPlate(), reservationAddForm.getCarModel(), reservationAddForm.getCarType());
+        Reservation reservationToSave = new Reservation(reservationAddForm.entryDate(), reservationAddForm.exitDate(), reservationAddForm.carPlate(), reservationAddForm.carModel(), reservationAddForm.carType());
         this.reservationRepository.save(reservationToSave);
-        assignReservationToParking(reservationAddForm.getParkingId(), reservationToSave);
-        assignReservationToEmployee(reservationAddForm.getDni(), reservationToSave);
+        assignReservationToParking(reservationAddForm.parkingId(), reservationToSave);
+        assignReservationToEmployee(reservationAddForm.dni(), reservationToSave);
     }
 
     private void assignReservationToParking(Long parkingId, Reservation reservationToSave) {

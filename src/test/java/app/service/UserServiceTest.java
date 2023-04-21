@@ -1,7 +1,7 @@
 package app.service;
 
 import app.model.User;
-import app.model.form.UserEditForm;
+import app.model.dto.UserEditForm;
 import app.repository.UserRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;

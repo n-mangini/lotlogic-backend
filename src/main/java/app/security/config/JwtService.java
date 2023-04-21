@@ -1,6 +1,6 @@
 package app.security.config;
 
-import app.model.form.UserLoginForm;
+import app.model.dto.UserLoginForm;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -20,7 +20,7 @@ public class JwtService {
     public String generateToken(UserLoginForm user, String role) {
         String jwtToken;
         jwtToken = Jwts.builder()
-                .setSubject(user.getDni())
+                .setSubject(user.dni())
                 .claim("role", role)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + ONE_DAY))

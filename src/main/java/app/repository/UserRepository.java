@@ -13,11 +13,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByDni(String dni);
 
     //TODO Change object for user
-    @Query("SELECT u.dni, u.firstName, u.lastName FROM User u WHERE u.role = 'EMPLOYEE' AND u.active = true")
-    List<Object> findAllEmployees();
+    @Query("SELECT u FROM User u WHERE u.role = 'EMPLOYEE' AND u.active = true")
+    List<User> findAllEmployees();
 
-    @Query("SELECT u.dni, u.firstName, u.lastName FROM User u WHERE u.role = 'OWNER' AND u.active = true")
-    List<Object> findAllOwners();
+    @Query("SELECT u FROM User u WHERE u.role = 'OWNER' AND u.active = true")
+    List<User> findAllOwners();
 
     Optional<User> findUserByDniAndPassword(String dni, String password);
 

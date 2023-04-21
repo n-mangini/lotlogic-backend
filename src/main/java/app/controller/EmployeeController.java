@@ -1,6 +1,6 @@
 package app.controller;
 
-import app.model.form.ReservationAddForm;
+import app.model.dto.ReservationAddForm;
 import app.service.ReservationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

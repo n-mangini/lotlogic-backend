@@ -13,7 +13,7 @@ public class Fee {
     private long feeId;
 
     @Column
-    private int feeType;
+    private int feePrice;
 
     @Column
     private String carType;
@@ -21,14 +21,14 @@ public class Fee {
     public Fee() {
     }
 
-    public Fee(long feeId, int feeType, String carType) {
+    public Fee(long feeId, int feePrice, String carType) {
         this.feeId = feeId;
-        this.feeType = feeType;
+        this.feePrice = feePrice;
         this.carType = carType;
     }
 
-    public Fee(int feeType, String carType) {
-        this.feeType = feeType;
+    public Fee(int feePrice, String carType) {
+        this.feePrice = feePrice;
         this.carType = carType;
     }
 
@@ -40,16 +40,16 @@ public class Fee {
         this.feeId = feeId;
     }
 
-    public int getFeeType() {
-        return this.feeType;
+    public int getFeePrice() {
+        return this.feePrice;
     }
 
     public String getCarType() {
         return this.carType;
     }
 
-    public void setFeeType(int fee) {
-        this.feeType = fee;
+    public void setFeePrice(int fee) {
+        this.feePrice = fee;
     }
 
     public void setCarType(String carType) {

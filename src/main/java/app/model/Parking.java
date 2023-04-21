@@ -33,6 +33,14 @@ public class Parking {
 
     }
 
+    public Parking(long id, String address, boolean active, List<Floor> floors, List<Fee> fees) {
+        this.id = id;
+        this.address = address;
+        this.active = active;
+        this.floors = floors;
+        this.fees = fees;
+    }
+
     public Parking(String address, List<Floor> floors, List<Fee> fees) {
         this.address = address;
         this.floors = floors;
