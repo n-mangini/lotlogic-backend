@@ -24,13 +24,13 @@ public class AdminController {
     @PostMapping(path = "/add-owner", consumes = {"application/json"})
     public ResponseEntity<?> createOwner(@RequestBody final User user) {
         this.userService.saveOwner(user);
-        return new ResponseEntity<>("owner " + user.getUserId() + " created", HttpStatus.CREATED);
+        return new ResponseEntity<>("owner " + user.getDni() + " created", HttpStatus.CREATED);
     }
 
-    @DeleteMapping(path = "/delete-owner/{userId}")
-    public ResponseEntity<?> deleteOwner(@PathVariable final Long userId) {
-        this.userService.deleteOwner(userId);
-        return new ResponseEntity<>("owner " + userId + " deleted", HttpStatus.OK);
+    @DeleteMapping(path = "/delete-owner/{id}")
+    public ResponseEntity<?> deleteOwner(@PathVariable final Long id) {
+        this.userService.deleteOwner(id);
+        return new ResponseEntity<>("owner " + id + " deleted", HttpStatus.OK);
     }
 
     @PutMapping(path = "/update-owner/{userId}", consumes = {"application/json"})

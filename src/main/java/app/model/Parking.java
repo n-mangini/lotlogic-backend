@@ -13,74 +13,69 @@ public class Parking {
     @GeneratedValue(generator = "increment")
     @GenericGenerator(name = "increment", strategy = "increment")
     @Column
-    private long parkingId;
+    private long id;
 
     @Column
     private String address;
 
-    @OneToMany
-    private List<Floor> floors;
-
-    @OneToMany
-    private List<Fee> fees;
-
     @Column
     private boolean active = true;
+
+    @OneToMany(targetEntity = Floor.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "parking_id", referencedColumnName = "id")
+    private List<Floor> floors;
+
+    @OneToMany(targetEntity = Fee.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "parking_id", referencedColumnName = "id")
+    private List<Fee> fees;
 
     public Parking() {
 
     }
 
-    public Parking(long parkingId, String address) {
-        this.parkingId = parkingId;
+    public Parking(String address, List<Floor> floors, List<Fee> fees) {
         this.address = address;
-        this.floors = new ArrayList<>();
-        this.fees = new ArrayList<>();
+        this.floors = floors;
+        this.fees = fees;
     }
 
-    public Parking(String address) {
-        this.address = address;
-        this.floors = new ArrayList<>();
-        this.fees = new ArrayList<>();
+    public long getId() {
+        return this.id;
     }
 
-    public long getParkingId() {
-        return this.parkingId;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getAddress() {
         return this.address;
     }
 
-    public List<Floor> getFloors() {
-        return this.floors;
-    }
-
-    public List<Fee> getFees() {
-        return this.fees;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public boolean isActive() {
         return this.active;
     }
 
-    public void setParkingId(long parkingId) {
-        this.parkingId = parkingId;
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public List<Floor> getFloors() {
+        return this.floors;
     }
 
     public void setFloors(List<Floor> floors) {
         this.floors = floors;
     }
 
-    public void setFees(List<Fee> fees) {
-        this.fees = fees;
+    public List<Fee> getFees() {
+        return this.fees;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setFees(List<Fee> fees) {
+        this.fees = fees;
     }
 }

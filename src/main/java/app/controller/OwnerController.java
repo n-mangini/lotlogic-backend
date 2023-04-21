@@ -30,7 +30,7 @@ public class OwnerController {
     @PostMapping(path = "/add-employee", consumes = {"application/json"})
     public ResponseEntity<?> createEmployee(@RequestBody final User user) {
         this.userService.saveEmployee(user);
-        return new ResponseEntity<>("employee " + user.getUserId() + " created", HttpStatus.CREATED);
+        return new ResponseEntity<>("employee " + user.getDni() + " created", HttpStatus.CREATED);
     }
 
     @DeleteMapping(path = "/delete-employee/{userId}")

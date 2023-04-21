@@ -129,7 +129,7 @@ public class UserService {
     }
 
     private String getUserRoleById(String dni) {
-        return this.userRepository.findRoleById(dni);
+        return this.userRepository.findRoleByDni(dni);
     }
 
     public User getUserByDni(String dni) {

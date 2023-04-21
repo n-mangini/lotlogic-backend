@@ -1,17 +1,17 @@
 package app.repository;
 
 import app.model.Parking;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface ParkingRepository extends JpaRepository<Parking, Long> {
-    Optional<Parking> findByParkingId(Long parkingId);
+    @NotNull Optional<Parking> findById(@NotNull Long parkingId);
 
     Optional<Parking> findByAddress(String address);
 

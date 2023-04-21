@@ -4,23 +4,17 @@ import app.model.User;
 import app.model.form.UserEditForm;
 import app.repository.UserRepository;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.sql.SQLException;
-import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -215,8 +209,8 @@ public class UserServiceTest {
         this.testService.saveOwner(owner);
 
         //then
-        assertThatThrownBy(() -> this.testService.updateOwner(owner.getUserId(), ownerEditForm))
-                .isInstanceOf(ResponseStatusException.class).hasMessageContaining("user " + owner.getUserId() + " not found");
+        assertThatThrownBy(() -> this.testService.updateOwner(owner.getId(), ownerEditForm))
+                .isInstanceOf(ResponseStatusException.class).hasMessageContaining("user " + owner.getId() + " not found");
     }
 
     @Test
@@ -244,8 +238,8 @@ public class UserServiceTest {
         this.testService.saveEmployee(employee);
 
         //then
-        assertThatThrownBy(() -> this.testService.updateEmployee(employee.getUserId(), employeeEditForm))
-                .isInstanceOf(ResponseStatusException.class).hasMessageContaining("user " + employee.getUserId() + " not found");
+        assertThatThrownBy(() -> this.testService.updateEmployee(employee.getId(), employeeEditForm))
+                .isInstanceOf(ResponseStatusException.class).hasMessageContaining("user " + employee.getId() + " not found");
     }
 
     @Test

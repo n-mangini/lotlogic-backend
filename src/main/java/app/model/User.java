@@ -3,6 +3,7 @@ package app.model;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -12,7 +13,7 @@ public class User {
     @GeneratedValue(generator = "increment")
     @GenericGenerator(name = "increment", strategy = "increment")
     @Column
-    private Long userId;
+    private Long id;
 
     @Column(length = 9)
     private String dni;
@@ -30,7 +31,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    @ManyToMany
+    @OneToMany(targetEntity = Parking.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private List<Parking> parkings;
 
     @Column
@@ -39,12 +41,13 @@ public class User {
     public User() {
     }
 
-    public User(Long userId, String dni, String firstName, String lastName, String password) {
-        this.userId = userId;
+    public User(Long id, String dni, String firstName, String lastName, String password) {
+        this.id = id;
         this.dni = dni;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
+        this.parkings = new ArrayList<>();
     }
 
     public User(String dni, String firstName, String lastName, String password) {
@@ -52,6 +55,7 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
+        this.parkings = new ArrayList<>();
     }
 
     public User(String dni, String password, UserRole role) {
@@ -60,56 +64,64 @@ public class User {
         this.role = role;
     }
 
-    public Long getUserId() {
-        return this.userId;
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getDni() {
         return this.dni;
     }
 
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
+
     public String getFirstName() {
         return this.firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {
         return this.lastName;
     }
 
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     public String getPassword() {
         return this.password;
-    }
-
-    public UserRole getRole() {
-        return this.role;
-    }
-
-    public List<Parking> getParkings() {
-        return this.parkings;
-    }
-
-    public boolean isActive() {
-        return this.active;
-    }
-
-    public void setDni(String dni) {
-        this.dni = dni;
-    }
-
-    public void setFirstName(String name) {
-        this.firstName = name;
-    }
-
-    public void setLastName(String surname) {
-        this.lastName = surname;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
+    public UserRole getRole() {
+        return this.role;
+    }
+
     public void setRole(UserRole role) {
         this.role = role;
+    }
+
+    public List<Parking> getParkings() {
+        return this.parkings;
+    }
+
+    public void setParkings(List<Parking> parkings) {
+        this.parkings = parkings;
+    }
+
+    public boolean isActive() {
+        return this.active;
     }
 
     public void setActive(boolean active) {
