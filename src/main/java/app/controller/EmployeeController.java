@@ -2,6 +2,7 @@ package app.controller;
 
 import app.model.Reservation;
 import app.model.dto.ReservationAddForm;
+import app.model.dto.ReservationEditForm;
 import app.service.ReservationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +20,18 @@ public class EmployeeController {
         this.reservationService = reservationService;
     }
 
-    @PostMapping(path = "/add-reservation", consumes = {"application/json"})
+    //check in
+    @PostMapping(path = "/check-in-car", consumes = {"application/json"})
     public ResponseEntity<?> createReservation(@RequestBody final ReservationAddForm reservationAddForm) {
         this.reservationService.saveReservation(reservationAddForm);
         return new ResponseEntity<>("reservation created", HttpStatus.CREATED);
+    }
+
+    // check out -> sets exitDate to currentDate()
+    @PutMapping(path = "/check-out-car")
+    public ResponseEntity<?> endReservation(@RequestBody ReservationEditForm reservationEditForm){
+        this.reservationService.updateReservation(reservationEditForm);
+        return new ResponseEntity<>("checkout successful", HttpStatus.OK);
     }
 
     @GetMapping(path = "panel-reservations/{parkingId}")

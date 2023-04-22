@@ -63,18 +63,14 @@ public class OwnerController {
         return new ResponseEntity<>("parking " + parkingId + " updated", HttpStatus.OK);
     }
 
-    @GetMapping(path = "panel-parkings")
-    public List<Parking> getAllParkings() {
-        return this.parkingService.getAllParkings();
+    @GetMapping(path = "panel-parkings/{userId}")
+    public List<Parking> getAllParkings(@PathVariable final Long userId) {
+        return this.parkingService.getAllParkings(userId);
     }
 
-    @GetMapping(path = "panel-employee")
+    //TODO get all employees from his parkings
+    @GetMapping(path = "panel-employees")
     public List<User> getAllEmployees() {
         return this.userService.getAllEmployees();
-    }
-
-    @GetMapping(path = "panel-owner")
-    public List<User> getAllOwners() {
-        return this.userService.getAllOwners();
     }
 }

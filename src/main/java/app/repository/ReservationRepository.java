@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
-    @Query("SELECT r FROM Reservation r WHERE r.parking.id = ?1")
+    @Query("SELECT r FROM Reservation r WHERE r.parking.id = ?1 AND r.exitDate != null")
     List<Reservation> findAllReservations(Long parkingId);
 }

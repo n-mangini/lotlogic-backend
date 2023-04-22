@@ -41,6 +41,7 @@ public class ParkingService {
         }
     }
 
+    //TODO check if parking is deleted only by the owner or ADMIN
     public void deleteParking(Long parkingId) {
         final Optional<Parking> parkingOptional = this.parkingRepository.findById(parkingId);
         if (parkingOptional.isEmpty()) {
@@ -52,7 +53,7 @@ public class ParkingService {
 
     }
 
-    //TODO check if parking is updated only by the owner or Admin
+    //TODO check if parking is updated only by the owner or ADMIN
     public void updateParking(@NotNull Long parkingId, @NotNull ParkingEditForm parkingEditForm) {
         final Optional<User> userOptional = this.userRepository.findByDni(parkingEditForm.dni());
         if (userOptional.isEmpty()) {
@@ -72,6 +73,16 @@ public class ParkingService {
         this.parkingRepository.save(parkingById);
     }
 
+    public List<Parking> getAllParkings(Long userId) {
+        Optional<User> userOptional = this.userRepository.findById(userId);
+        if (userOptional.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user " + userId + " not found");
+        }
+        User user = userOptional.get();
+        return user.getParkings();
+    }
+
+    //only for admin
     public List<Parking> getAllParkings() {
         return this.parkingRepository.findAllParkings();
     }

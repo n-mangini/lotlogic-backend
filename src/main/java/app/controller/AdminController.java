@@ -1,7 +1,9 @@
 package app.controller;
 
+import app.model.Parking;
 import app.model.User;
 import app.model.dto.UserEditForm;
+import app.service.ParkingService;
 import app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,10 +17,12 @@ import java.util.List;
 @RequestMapping(path = "/api/user/admin")
 public class AdminController {
     private final UserService userService;
+    private final ParkingService parkingService;
 
     @Autowired
-    public AdminController(final UserService userService) {
+    public AdminController(final UserService userService, ParkingService parkingService) {
         this.userService = userService;
+        this.parkingService = parkingService;
     }
 
     @PostMapping(path = "/add-owner", consumes = {"application/json"})
@@ -27,10 +31,10 @@ public class AdminController {
         return new ResponseEntity<>("owner " + user.getDni() + " created", HttpStatus.CREATED);
     }
 
-    @DeleteMapping(path = "/delete-owner/{id}")
-    public ResponseEntity<?> deleteOwner(@PathVariable final Long id) {
-        this.userService.deleteOwner(id);
-        return new ResponseEntity<>("owner " + id + " deleted", HttpStatus.OK);
+    @DeleteMapping(path = "/delete-owner/{userId}")
+    public ResponseEntity<?> deleteOwner(@PathVariable final Long userId) {
+        this.userService.deleteOwner(userId);
+        return new ResponseEntity<>("owner " + userId + " deleted", HttpStatus.OK);
     }
 
     @PutMapping(path = "/update-owner/{userId}", consumes = {"application/json"})
@@ -39,13 +43,18 @@ public class AdminController {
         return new ResponseEntity<>("owner " + userId + " updated", HttpStatus.OK);
     }
 
-    @GetMapping(path = "panel-employee")
+    @GetMapping(path = "panel-employees")
     public List<User> getAllEmployees() {
         return this.userService.getAllEmployees();
     }
 
-    @GetMapping(path = "panel-owner")
+    @GetMapping(path = "panel-owners")
     public List<User> getAllOwners() {
         return this.userService.getAllOwners();
+    }
+
+    @GetMapping(path = "panel-parkings")
+    public List<Parking> getAllParkings() {
+        return this.parkingService.getAllParkings();
     }
 }
