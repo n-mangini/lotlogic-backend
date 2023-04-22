@@ -29,6 +29,10 @@ public class Parking {
     @JoinColumn(name = "parking_id", referencedColumnName = "id")
     private List<Fee> fees;
 
+    @OneToMany(targetEntity = Reservation.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "parking_id", referencedColumnName = "id")
+    private List<Reservation> reservations;
+
     public Parking() {
 
     }
@@ -39,12 +43,14 @@ public class Parking {
         this.active = active;
         this.floors = floors;
         this.fees = fees;
+        this.reservations = new ArrayList<>();
     }
 
     public Parking(String address, List<Floor> floors, List<Fee> fees) {
         this.address = address;
         this.floors = floors;
         this.fees = fees;
+        this.reservations = new ArrayList<>();
     }
 
     public long getId() {
@@ -85,5 +91,13 @@ public class Parking {
 
     public void setFees(List<Fee> fees) {
         this.fees = fees;
+    }
+
+    public List<Reservation> getReservations() {
+        return this.reservations;
+    }
+
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
     }
 }

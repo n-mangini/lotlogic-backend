@@ -11,13 +11,7 @@ public class Reservation {
     @GeneratedValue(generator = "increment")
     @GenericGenerator(name = "increment", strategy = "increment")
     @Column
-    private Long reservationId;
-
-    @Column
-    private String entryDate;
-
-    @Column
-    private String exitDate;
+    private Long id;
 
     @Column
     private String carPlate;
@@ -28,49 +22,42 @@ public class Reservation {
     @Column
     private String carType;
 
+    @Column
+    private String entryDate;
+
+    @Column
+    private String exitDate;
+
+    @ManyToOne
+    @JoinColumn(name = "parking_id")
+    private Parking parking;
 
     public Reservation() {
     }
 
-    public Reservation(Long reservationId, String entryDate, String exitDate, String carPlate, String carModel, String carType) {
-        this.reservationId = reservationId;
-        this.entryDate = entryDate;
-        this.exitDate = exitDate;
+    public Reservation(Long id, String carPlate, String carModel, String carType, String entryDate, String exitDate) {
+        this.id = id;
         this.carPlate = carPlate;
         this.carModel = carModel;
         this.carType = carType;
-    }
-
-    public Reservation(String entryDate, String exitDate, String carPlate, String carModel, String carType) {
         this.entryDate = entryDate;
         this.exitDate = exitDate;
+    }
+
+    public Reservation(String carPlate, String carModel, String carType, String entryDate, String exitDate) {
         this.carPlate = carPlate;
         this.carModel = carModel;
         this.carType = carType;
-    }
-
-    public Long getReservationId() {
-        return this.reservationId;
-    }
-
-    public void setReservationId(Long reservationId) {
-        this.reservationId = reservationId;
-    }
-
-    public String getEntryDate() {
-        return this.entryDate;
-    }
-
-    public void setEntryDate(String entryDate) {
         this.entryDate = entryDate;
-    }
-
-    public String getExitDate() {
-        return this.exitDate;
-    }
-
-    public void setExitDate(String exitDate) {
         this.exitDate = exitDate;
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long reservationId) {
+        this.id = reservationId;
     }
 
     public String getCarPlate() {
@@ -95,5 +82,21 @@ public class Reservation {
 
     public void setCarType(String carType) {
         this.carType = carType;
+    }
+
+    public String getEntryDate() {
+        return this.entryDate;
+    }
+
+    public void setEntryDate(String entryDate) {
+        this.entryDate = entryDate;
+    }
+
+    public String getExitDate() {
+        return this.exitDate;
+    }
+
+    public void setExitDate(String exitDate) {
+        this.exitDate = exitDate;
     }
 }
