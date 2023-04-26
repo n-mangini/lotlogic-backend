@@ -57,7 +57,9 @@ public class ReservationService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "reservation not found");
         }
         Reservation reservation = reservationOptional.get();
-        reservation.setExitDate(reservationEditForm.exitDate());
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime date = LocalDateTime.now();
+        reservation.setExitDate(dtf.format(date));
         this.reservationRepository.save(reservation);
     }
 }
