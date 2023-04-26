@@ -10,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -27,7 +30,9 @@ public class ReservationService {
     //TODO exceptions
     public void saveReservation(ReservationAddForm reservationAddForm) {
         Parking parking = this.parkingRepository.findById(reservationAddForm.parkingId()).get();
-        parking.getReservations().add(new Reservation(reservationAddForm.carPlate(), reservationAddForm.carModel(), reservationAddForm.carType(), reservationAddForm.entryDate(), reservationAddForm.exitDate()));
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime date = LocalDateTime.now();
+        parking.getReservations().add(new Reservation(reservationAddForm.carPlate(), reservationAddForm.carModel(), reservationAddForm.carType(), dtf.format(date), reservationAddForm.exitDate()));
         this.parkingRepository.save(parking);
     }
 
@@ -35,6 +40,9 @@ public class ReservationService {
         return this.reservationRepository.findAllReservations(parkingId);
     }
 
+    public List<Reservation> findAllReservations() {
+        return this.reservationRepository.findAllReservations();
+    }
     //TODO
     public void updateReservation(ReservationEditForm reservationEditForm) {
         Optional<Parking> parkingOptional = this.parkingRepository.findById(reservationEditForm.parkingId());

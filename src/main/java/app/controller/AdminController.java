@@ -1,9 +1,11 @@
 package app.controller;
 
 import app.model.Parking;
+import app.model.Reservation;
 import app.model.User;
 import app.model.dto.UserEditForm;
 import app.service.ParkingService;
+import app.service.ReservationService;
 import app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,11 +20,13 @@ import java.util.List;
 public class AdminController {
     private final UserService userService;
     private final ParkingService parkingService;
+    private final ReservationService reservationService;
 
     @Autowired
-    public AdminController(final UserService userService, ParkingService parkingService) {
+    public AdminController(final UserService userService, ParkingService parkingService, ReservationService reservationService) {
         this.userService = userService;
         this.parkingService = parkingService;
+        this.reservationService = reservationService;
     }
 
     @PostMapping(path = "/add-owner", consumes = {"application/json"})
@@ -56,5 +60,10 @@ public class AdminController {
     @GetMapping(path = "panel-parkings")
     public List<Parking> getAllParkings() {
         return this.parkingService.getAllParkings();
+    }
+
+    @GetMapping(path = "panel-reservations")
+    public List<Reservation> getAllReservations(){
+        return this.reservationService.findAllReservations();
     }
 }
