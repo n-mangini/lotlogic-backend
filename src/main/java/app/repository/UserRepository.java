@@ -1,6 +1,9 @@
 package app.repository;
 
 import app.model.User;
+import app.model.UserRole;
+import app.model.projection.UserProjection;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -16,8 +19,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.role = 'EMPLOYEE' AND u.active = true")
     List<User> findAllEmployees();
 
-    @Query("SELECT u FROM User u WHERE u.role = 'OWNER' AND u.active = true")
-    List<User> findAllOwners();
+    List<UserProjection> findAllByActiveAndRole(boolean active, UserRole role);
 
     Optional<User> findUserByDniAndPassword(String dni, String password);
 

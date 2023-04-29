@@ -12,7 +12,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -27,13 +26,29 @@ public class ReservationService {
         this.parkingRepository = parkingRepository;
     }
 
-    //TODO exceptions
     public void saveReservation(ReservationAddForm reservationAddForm) {
-        Parking parking = this.parkingRepository.findById(reservationAddForm.parkingId()).get();
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        LocalDateTime date = LocalDateTime.now();
-        parking.getReservations().add(new Reservation(reservationAddForm.carPlate(), reservationAddForm.carModel(), reservationAddForm.carType(), dtf.format(date), reservationAddForm.exitDate()));
-        this.parkingRepository.save(parking);
+        Optional<Parking> parkingOptional = this.parkingRepository.findById(reservationAddForm.parkingId());
+        if (parkingOptional.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "parking " + reservationAddForm.parkingId() + " not found");
+        } else {
+            Parking parking = parkingOptional.get();
+            //throw if parking floor is disabled
+            if (!parking.getFloors().get(reservationAddForm.floor() + 1).isEnabled()) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "floor " + reservationAddForm.floor() + " is not enabled");
+            }
+            //throws exception when tries to create reservation(check in) in floor which doesn't exist in parking
+            if (parking.getFloors().size() < reservationAddForm.floor()) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "parking doesnt have floor" + reservationAddForm.floor());
+            }
+            //throws when amount of reservations in that floor [cars] are >= than slots number
+            if (findAllReservations(reservationAddForm.parkingId()).size() >= parking.getFloors().get(reservationAddForm.floor()).getSlotsNumber()) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "floor " + reservationAddForm.floor() + " is full");
+            }
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+            LocalDateTime date = LocalDateTime.now();
+            parking.getReservations().add(new Reservation(reservationAddForm.floor(), reservationAddForm.vehiclePlate(), reservationAddForm.vehicleModel(), reservationAddForm.vehicleType(), dtf.format(date), null));
+            this.parkingRepository.save(parking);
+        }
     }
 
     public List<Reservation> findAllReservations(Long parkingId) {
@@ -43,6 +58,7 @@ public class ReservationService {
     public List<Reservation> findAllReservations() {
         return this.reservationRepository.findAllReservations();
     }
+
     //TODO
     public void updateReservation(ReservationEditForm reservationEditForm) {
         Optional<Parking> parkingOptional = this.parkingRepository.findById(reservationEditForm.parkingId());

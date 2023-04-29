@@ -4,6 +4,7 @@ import app.model.Parking;
 import app.model.Reservation;
 import app.model.User;
 import app.model.dto.UserEditForm;
+import app.model.projection.UserProjection;
 import app.service.ParkingService;
 import app.service.ReservationService;
 import app.service.UserService;
@@ -53,7 +54,7 @@ public class AdminController {
     }
 
     @GetMapping(path = "panel-owners")
-    public List<User> getAllOwners() {
+    public List<UserProjection> getAllOwners() {
         return this.userService.getAllOwners();
     }
 

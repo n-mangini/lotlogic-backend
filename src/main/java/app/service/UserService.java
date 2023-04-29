@@ -3,6 +3,7 @@ package app.service;
 import app.model.User;
 import app.model.UserRole;
 import app.model.dto.UserEditForm;
+import app.model.projection.UserProjection;
 import app.model.dto.UserLoginForm;
 import app.repository.UserRepository;
 import app.security.config.JwtService;
@@ -28,9 +29,13 @@ public class UserService {
     }
 
     public String loginUser(@RequestBody @NotNull UserLoginForm user) {
+        final Optional<User> userDni = this.userRepository.findByDni(user.dni());
+        if (userDni.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user " + user.dni() + " not found");
+        }
         final Optional<User> userData = this.userRepository.findUserByDniAndPassword(user.dni(), user.password());
         if (userData.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user " + user.dni() + " not found");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "user or password invalid");
         }
         return this.jwtService.generateToken(user, getUserRoleById(user.dni()));
     }
@@ -144,7 +149,7 @@ public class UserService {
         return this.userRepository.findAllEmployees();
     }
 
-    public List<User> getAllOwners() {
-        return this.userRepository.findAllOwners();
+    public List<UserProjection> getAllOwners() {
+        return this.userRepository.findAllByActiveAndRole(true, UserRole.OWNER);
     }
 }

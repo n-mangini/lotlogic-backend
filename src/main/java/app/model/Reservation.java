@@ -1,5 +1,6 @@
 package app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -14,13 +15,16 @@ public class Reservation {
     private Long id;
 
     @Column
-    private String carPlate;
+    private int floor;
 
     @Column
-    private String carModel;
+    private String vehiclePlate;
 
     @Column
-    private String carType;
+    private String vehicleModel;
+
+    @Column
+    private String vehicleType;
 
     @Column
     private String entryDate;
@@ -28,6 +32,7 @@ public class Reservation {
     @Column
     private String exitDate;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "parking_id")
     private Parking parking;
@@ -35,19 +40,21 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(Long id, String carPlate, String carModel, String carType, String entryDate, String exitDate) {
+    public Reservation(Long id, int floor, String vehiclePlate, String vehicleModel, String vehicleType, String entryDate, String exitDate) {
         this.id = id;
-        this.carPlate = carPlate;
-        this.carModel = carModel;
-        this.carType = carType;
+        this.floor = floor;
+        this.vehiclePlate = vehiclePlate;
+        this.vehicleModel = vehicleModel;
+        this.vehicleType = vehicleType;
         this.entryDate = entryDate;
         this.exitDate = exitDate;
     }
 
-    public Reservation(String carPlate, String carModel, String carType, String entryDate, String exitDate) {
-        this.carPlate = carPlate;
-        this.carModel = carModel;
-        this.carType = carType;
+    public Reservation(int floor, String vehiclePlate, String vehicleModel, String vehicleType, String entryDate, String exitDate) {
+        this.floor = floor;
+        this.vehiclePlate = vehiclePlate;
+        this.vehicleModel = vehicleModel;
+        this.vehicleType = vehicleType;
         this.entryDate = entryDate;
         this.exitDate = exitDate;
     }
@@ -56,32 +63,40 @@ public class Reservation {
         return this.id;
     }
 
-    public void setId(Long reservationId) {
-        this.id = reservationId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getCarPlate() {
-        return this.carPlate;
+    public int getFloor() {
+        return this.floor;
     }
 
-    public void setCarPlate(String carPlate) {
-        this.carPlate = carPlate;
+    public void setFloor(int floor) {
+        this.floor = floor;
     }
 
-    public String getCarModel() {
-        return this.carModel;
+    public String getVehiclePlate() {
+        return this.vehiclePlate;
     }
 
-    public void setCarModel(String carModel) {
-        this.carModel = carModel;
+    public void setVehiclePlate(String carPlate) {
+        this.vehiclePlate = carPlate;
     }
 
-    public String getCarType() {
-        return this.carType;
+    public String getVehicleModel() {
+        return this.vehicleModel;
     }
 
-    public void setCarType(String carType) {
-        this.carType = carType;
+    public void setVehicleModel(String carModel) {
+        this.vehicleModel = carModel;
+    }
+
+    public String getVehicleType() {
+        return this.vehicleType;
+    }
+
+    public void setVehicleType(String carType) {
+        this.vehicleType = carType;
     }
 
     public String getEntryDate() {
@@ -98,5 +113,13 @@ public class Reservation {
 
     public void setExitDate(String exitDate) {
         this.exitDate = exitDate;
+    }
+
+    public Parking getParking() {
+        return this.parking;
+    }
+
+    public void setParking(Parking parking) {
+        this.parking = parking;
     }
 }
