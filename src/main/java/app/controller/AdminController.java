@@ -31,15 +31,16 @@ public class AdminController {
     }
 
     @PostMapping(path = "/add-owner", consumes = {"application/json"})
-    public ResponseEntity<?> createOwner(@RequestBody final User user) {
+    public ResponseEntity<String> createOwner(@RequestBody final User user) {
         this.userService.saveOwner(user);
-        return new ResponseEntity<>("owner " + user.getDni() + " created", HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(user.getId().toString());
     }
 
     @DeleteMapping(path = "/delete-owner/{userId}")
     public ResponseEntity<?> deleteOwner(@PathVariable final Long userId) {
         this.userService.deleteOwner(userId);
-        return new ResponseEntity<>("owner " + userId + " deleted", HttpStatus.OK);
+        User user = this.userService.getUserById(userId);
+        return new ResponseEntity<>("owner " + user.getDni() + " deleted", HttpStatus.OK);
     }
 
     @PutMapping(path = "/update-owner/{userId}", consumes = {"application/json"})

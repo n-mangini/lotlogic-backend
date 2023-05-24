@@ -13,7 +13,7 @@ public class Parking {
     @GeneratedValue(generator = "increment")
     @GenericGenerator(name = "increment", strategy = "increment")
     @Column
-    private long id;
+    private Long id;
 
     @Column
     private String address;
@@ -37,7 +37,7 @@ public class Parking {
 
     }
 
-    public Parking(long id, String address, boolean active, List<Floor> floors, List<Fee> fees) {
+    public Parking(Long id, String address, boolean active, List<Floor> floors, List<Fee> fees) {
         this.id = id;
         this.address = address;
         this.active = active;
@@ -53,11 +53,11 @@ public class Parking {
         this.reservations = new ArrayList<>();
     }
 
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

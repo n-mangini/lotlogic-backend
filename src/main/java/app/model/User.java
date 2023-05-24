@@ -29,6 +29,7 @@ public class User {
 
     @Column
     @Enumerated(EnumType.STRING)
+
     private UserRole role;
 
     @OneToMany(targetEntity = Parking.class, cascade = CascadeType.ALL)

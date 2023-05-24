@@ -46,9 +46,9 @@ public class OwnerController {
     }
 
     @PostMapping(path = "/add-parking", consumes = {"application/json"})
-    public ResponseEntity<?> createParking(@RequestBody final ParkingAddForm parking) {
-        this.parkingService.saveParking(parking);
-        return new ResponseEntity<>("parking " + parking.address() + " created and assigned to user " + parking.dni(), HttpStatus.CREATED);
+    public ResponseEntity<String> createParking(@RequestBody final ParkingAddForm parking) {
+        Long parkingId = this.parkingService.saveParking(parking);
+        return ResponseEntity.status(HttpStatus.CREATED).body(parkingId.toString());
     }
 
     @DeleteMapping(path = "/delete-parking/{parkingId}")

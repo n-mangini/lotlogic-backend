@@ -30,7 +30,7 @@ public class UserService {
 
     public String loginUser(@RequestBody @NotNull UserLoginForm user) {
         final Optional<User> userDni = this.userRepository.findByDni(user.dni());
-        if (userDni.isEmpty()){
+        if (userDni.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user " + user.dni() + " not found");
         }
         final Optional<User> userData = this.userRepository.findUserByDniAndPassword(user.dni(), user.password());
@@ -44,7 +44,7 @@ public class UserService {
 
     public void saveOwner(@RequestBody @NotNull User user) {
         final Optional<User> userByDni = this.userRepository.findByDni(user.getDni());
-        if (userByDni.isEmpty() || !userByDni.get().isActive()) {
+        if (userByDni.isEmpty()) {
             if (user.getPassword().length() <= 4)
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, "password is too short");
             user.setRole(UserRole.OWNER);
@@ -57,7 +57,7 @@ public class UserService {
 
     public void saveEmployee(@RequestBody @NotNull User user) {
         final Optional<User> userByDni = this.userRepository.findByDni(user.getDni());
-        if (userByDni.isEmpty() || !userByDni.get().isActive()) {
+        if (userByDni.isEmpty()) {
             if (user.getPassword().length() > 4)
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, "PIN must be 4 digit");
             user.setRole(UserRole.EMPLOYEE);
@@ -135,6 +135,14 @@ public class UserService {
 
     private String getUserRoleById(String dni) {
         return this.userRepository.findRoleByDni(dni);
+    }
+
+    public User getUserById(Long id){
+        Optional<User> userOptional = this.userRepository.findById(id);
+        if (userOptional.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user " + id + " not found");
+        }
+        return userOptional.get();
     }
 
     public User getUserByDni(String dni) {

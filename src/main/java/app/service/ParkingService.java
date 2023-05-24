@@ -24,7 +24,7 @@ public class ParkingService {
         this.userRepository = userRepository;
     }
 
-    public void saveParking(@RequestBody @NotNull ParkingAddForm parkingAddForm) {
+    public Long saveParking(@RequestBody @NotNull ParkingAddForm parkingAddForm) {
         Optional<Parking> parkingOptional = this.parkingRepository.findByAddress(parkingAddForm.address());
         if (parkingOptional.isPresent() && parkingOptional.get().isActive())
             throw new ResponseStatusException(HttpStatus.CONFLICT, "parking " + parkingAddForm.address() + " already exists");
@@ -38,6 +38,8 @@ public class ParkingService {
             Parking parking = new Parking(parkingAddForm.address(), parkingAddForm.floors(), parkingAddForm.fees());
             user.getParkings().add(parking);
             this.userRepository.save(user);
+            //parking id from parking added
+            return user.getParkings().get(user.getParkings().size() - 1).getId();
         }
     }
 
