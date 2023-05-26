@@ -1,4 +1,4 @@
 package app.model.dto;
 
-public record ReservationEditForm(Long reservationId, Long parkingId) {
+public record ReservationEditForm(Long parkingId) {
 }

@@ -24,7 +24,7 @@ public class Reservation {
     private String vehicleModel;
 
     @Column
-    private String vehicleType;
+    private String vehicleFee;
 
     @Column
     private String entryDate;
@@ -40,21 +40,21 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(Long id, int floor, String vehiclePlate, String vehicleModel, String vehicleType, String entryDate, String exitDate) {
+    public Reservation(Long id, int floor, String vehiclePlate, String vehicleModel, String vehicleFee, String entryDate, String exitDate) {
         this.id = id;
         this.floor = floor;
         this.vehiclePlate = vehiclePlate;
         this.vehicleModel = vehicleModel;
-        this.vehicleType = vehicleType;
+        this.vehicleFee = vehicleFee;
         this.entryDate = entryDate;
         this.exitDate = exitDate;
     }
 
-    public Reservation(int floor, String vehiclePlate, String vehicleModel, String vehicleType, String entryDate, String exitDate) {
+    public Reservation(int floor, String vehiclePlate, String vehicleModel, String vehicleFee, String entryDate, String exitDate) {
         this.floor = floor;
         this.vehiclePlate = vehiclePlate;
         this.vehicleModel = vehicleModel;
-        this.vehicleType = vehicleType;
+        this.vehicleFee = vehicleFee;
         this.entryDate = entryDate;
         this.exitDate = exitDate;
     }
@@ -91,12 +91,12 @@ public class Reservation {
         this.vehicleModel = carModel;
     }
 
-    public String getVehicleType() {
-        return this.vehicleType;
+    public String getVehicleFee() {
+        return this.vehicleFee;
     }
 
-    public void setVehicleType(String carType) {
-        this.vehicleType = carType;
+    public void setVehicleFee(String carType) {
+        this.vehicleFee = carType;
     }
 
     public String getEntryDate() {

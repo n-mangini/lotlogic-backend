@@ -64,8 +64,13 @@ public class AdminController {
         return this.parkingService.getAllParkings();
     }
 
-    @GetMapping(path = "panel-reservations")
-    public List<Reservation> getAllReservations(){
-        return this.reservationService.findAllReservations();
+    @GetMapping(path = "panel-reservations-current")
+    public List<Reservation> getAllCurrentReservations(){
+        return this.reservationService.findAllCurrentReservations();
+    }
+
+    @GetMapping(path = "panel-reservations-old")
+    public List<Reservation> getAllOldReservations(){
+        return this.reservationService.findAllOldReservations();
     }
 }

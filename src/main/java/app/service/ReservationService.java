@@ -1,5 +1,7 @@
 package app.service;
 
+import app.model.Fee;
+import app.model.Floor;
 import app.model.Parking;
 import app.model.Reservation;
 import app.model.dto.ReservationAddForm;
@@ -41,33 +43,37 @@ public class ReservationService {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "parking doesnt have floor" + reservationAddForm.floor());
             }
             //throws when amount of reservations in that floor [cars] are >= than slots number
-            if (findAllReservations(reservationAddForm.parkingId()).size() >= parking.getFloors().get(reservationAddForm.floor()).getSlotsNumber()) {
+            if (findAllCurrentReservations(reservationAddForm.parkingId()).size() >= parking.getFloors().get(reservationAddForm.floor()).getSlotsNumber()) {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "floor " + reservationAddForm.floor() + " is full");
             }
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
             LocalDateTime date = LocalDateTime.now();
-            parking.getReservations().add(new Reservation(reservationAddForm.floor(), reservationAddForm.vehiclePlate(), reservationAddForm.vehicleModel(), reservationAddForm.vehicleType(), dtf.format(date), null));
+            parking.getReservations().add(new Reservation(reservationAddForm.floor(), reservationAddForm.vehiclePlate(), reservationAddForm.vehicleModel(), reservationAddForm.vehicleFee(), dtf.format(date), null));
             this.parkingRepository.save(parking);
         }
     }
 
-    public List<Reservation> findAllReservations(Long parkingId) {
-        return this.reservationRepository.findAllReservations(parkingId);
+    public List<Reservation> findAllCurrentReservations(Long parkingId) {
+        return this.reservationRepository.findAllCurrentReservations(parkingId);
     }
 
-    public List<Reservation> findAllReservations() {
-        return this.reservationRepository.findAllReservations();
+    public List<Reservation> findAllCurrentReservations() {
+        return this.reservationRepository.findAllCurrentReservations();
+    }
+
+    public List<Reservation> findAllOldReservations() {
+        return this.reservationRepository.findAllOldReservations();
     }
 
     //TODO
-    public void updateReservation(ReservationEditForm reservationEditForm) {
+    public void updateReservation(ReservationEditForm reservationEditForm, Long reservationId) {
         Optional<Parking> parkingOptional = this.parkingRepository.findById(reservationEditForm.parkingId());
         if (parkingOptional.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "parking " + reservationEditForm.parkingId() + " not found");
         }
         Parking parking = parkingOptional.get();
         Optional<Reservation> reservationOptional = parking.getReservations().stream()
-                .filter(reservation -> Objects.equals(reservation.getId(), reservationEditForm.reservationId()))
+                .filter(reservation -> Objects.equals(reservation.getId(), reservationId))
                 .findFirst();
         if (reservationOptional.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "reservation not found");
@@ -77,5 +83,13 @@ public class ReservationService {
         LocalDateTime date = LocalDateTime.now();
         reservation.setExitDate(dtf.format(date));
         this.reservationRepository.save(reservation);
+    }
+
+    public List<Fee> findAllFees(Long parkingId) {
+        return this.parkingRepository.findAllFees(parkingId);
+    }
+
+    public List<Floor> findAllFloors(Long parkingId) {
+        return this.parkingRepository.findAllFloors(parkingId);
     }
 }

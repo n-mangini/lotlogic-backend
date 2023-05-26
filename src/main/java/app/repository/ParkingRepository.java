@@ -1,5 +1,7 @@
 package app.repository;
 
+import app.model.Fee;
+import app.model.Floor;
 import app.model.Parking;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,4 +19,10 @@ public interface ParkingRepository extends JpaRepository<Parking, Long> {
 
     @Query("SELECT p FROM Parking p WHERE p.active = true")
     List<Parking> findAllParkings();
+
+    @Query("SELECT p.fees from Parking p WHERE p.id = ?1")
+    List<Fee> findAllFees(Long parkingId);
+
+    @Query("SELECT p.floors FROM Parking p WHERE p.id = ?1")
+    List<Floor> findAllFloors(Long parkingId);
 }

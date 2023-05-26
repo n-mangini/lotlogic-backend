@@ -1,5 +1,7 @@
 package app.controller;
 
+import app.model.Fee;
+import app.model.Floor;
 import app.model.Reservation;
 import app.model.dto.ReservationAddForm;
 import app.model.dto.ReservationEditForm;
@@ -28,14 +30,24 @@ public class EmployeeController {
     }
 
     // check out -> sets exitDate to currentDate()
-    @PutMapping(path = "/check-out-car")
-    public ResponseEntity<?> endReservation(@RequestBody ReservationEditForm reservationEditForm){
-        this.reservationService.updateReservation(reservationEditForm);
+    @PutMapping(path = "/check-out-car/{reservationId}")
+    public ResponseEntity<?> endReservation(@RequestBody ReservationEditForm reservationEditForm, @PathVariable Long reservationId){
+        this.reservationService.updateReservation(reservationEditForm, reservationId);
         return new ResponseEntity<>("checkout successful", HttpStatus.OK);
     }
 
     @GetMapping(path = "panel-reservations/{parkingId}")
     public List<Reservation> getAllReservations(@PathVariable Long parkingId){
-        return this.reservationService.findAllReservations(parkingId);
+        return this.reservationService.findAllCurrentReservations(parkingId);
+    }
+
+    @GetMapping(path = "fees/{parkingId}")
+    public List<Fee> getAllFees(@PathVariable Long parkingId){
+        return this.reservationService.findAllFees(parkingId);
+    }
+
+    @GetMapping(path = "floors/{parkingId}")
+    public List<Floor> getAllFloors(@PathVariable Long parkingId){
+        return this.reservationService.findAllFloors(parkingId);
     }
 }
