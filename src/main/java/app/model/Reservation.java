@@ -23,14 +23,15 @@ public class Reservation {
     @Column
     private String vehicleModel;
 
-    @Column
-    private String vehicleFee;
 
     @Column
     private String entryDate;
 
     @Column
     private String exitDate;
+
+    @Column
+    private String vehicleFee;
 
     @JsonIgnore
     @ManyToOne

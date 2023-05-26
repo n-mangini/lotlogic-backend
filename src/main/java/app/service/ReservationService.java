@@ -35,7 +35,7 @@ public class ReservationService {
         } else {
             Parking parking = parkingOptional.get();
             //throw if parking floor is disabled
-            if (!parking.getFloors().get(reservationAddForm.floor() + 1).isEnabled()) {
+            if (!parking.getFloors().get(reservationAddForm.floor() - 1).isEnabled()) {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "floor " + reservationAddForm.floor() + " is not enabled");
             }
             //throws exception when tries to create reservation(check in) in floor which doesn't exist in parking
@@ -43,7 +43,7 @@ public class ReservationService {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "parking doesnt have floor" + reservationAddForm.floor());
             }
             //throws when amount of reservations in that floor [cars] are >= than slots number
-            if (findAllCurrentReservations(reservationAddForm.parkingId()).size() >= parking.getFloors().get(reservationAddForm.floor()).getSlotsNumber()) {
+            if (findAllCurrentReservations(reservationAddForm.parkingId()).size() >= parking.getFloors().get(reservationAddForm.floor() - 1).getSlotsNumber()) {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "floor " + reservationAddForm.floor() + " is full");
             }
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
