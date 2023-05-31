@@ -36,13 +36,23 @@ CommandLineAppStartupRunner implements CommandLineRunner {
         owner1.setRole(UserRole.OWNER);
         User employee1 = new User("40000000", "Miguel", "Granados", "1234");
         employee1.setRole(UserRole.EMPLOYEE);
+        User owner2 = new User("60000000", "Damian", "Szifron", "123456");
+        owner2.setRole(UserRole.OWNER);
+        User employee2 = new User("80000000", "Javier", "Milei", "1234");
+        employee2.setRole(UserRole.EMPLOYEE);
         this.userRepository.save(admin);
         this.userRepository.save(owner1);
         this.userRepository.save(employee1);
+        this.userRepository.save(owner2);
+        this.userRepository.save(employee2);
 
         List<Floor> floors = new ArrayList<>(Arrays.asList(new Floor(50), new Floor(100), new Floor(1)));
         List<Fee> fees = new ArrayList<>(Arrays.asList(new Fee("CAR", 200), new Fee("TRUCK", 100), new Fee("MOTORCYCLE", 100)));
         owner1.getParkings().add(new Parking("Antezana 247, CABA", floors, fees));
         this.userRepository.save(owner1);
+        List<Floor> floors2 = new ArrayList<>(Arrays.asList(new Floor(10), new Floor(20), new Floor(10)));
+        List<Fee> fees2 = new ArrayList<>(Arrays.asList(new Fee("CAR", 200), new Fee("TRUCK", 100), new Fee("FAMILIARES", 0)));
+        owner2.getParkings().add(new Parking("Cabildo y Juramento, CABA", floors2, fees2));
+        this.userRepository.save(owner2);
     }
 }

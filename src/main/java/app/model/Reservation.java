@@ -23,7 +23,6 @@ public class Reservation {
     @Column
     private String vehicleModel;
 
-
     @Column
     private String entryDate;
 
@@ -31,7 +30,7 @@ public class Reservation {
     private String exitDate;
 
     @Column
-    private String vehicleFee;
+        private String vehicleFee;
 
     @JsonIgnore
     @ManyToOne

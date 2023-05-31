@@ -42,9 +42,6 @@ public class JwtFilter extends GenericFilterBean {
         final String token = authHeader.substring(7);
         String role = this.jwtService.extractRole(token);
 
-        if (this.jwtService.isTokenExpired(token)) {
-            throw new ServletException("Expired token");
-        }
         Claims claims = Jwts.parser().setSigningKey(this.jwtService.getSignInKey()).parseClaimsJws(token).getBody();
         request.setAttribute("claims", claims);
         request.setAttribute("blog", servletRequest.getParameter("id"));
