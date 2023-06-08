@@ -37,7 +37,9 @@ public class UserService {
         if (userData.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "user or password invalid");
         }
-        return this.jwtService.generateToken(user, getUserRoleById(user.dni()));
+        String token = this.jwtService.generateToken(user, getUserRoleById(user.dni()));
+        this.jwtService.tokens.put(token, null);
+        return token;
     }
 
     //TODO add possibility to have employee and owner with same dni then fix test exception msg

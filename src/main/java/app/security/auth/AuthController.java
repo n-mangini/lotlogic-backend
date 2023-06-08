@@ -1,5 +1,6 @@
 package app.security.auth;
 
+import app.model.dto.TokenForm;
 import app.security.config.JwtService;
 import app.security.model.response.LoginResponse;
 import app.security.model.response.TokenResponse;
@@ -30,5 +31,11 @@ public class AuthController {
         String lastName = this.userService.getUserByDni(this.jwtService.extractDni(token)).getLastName();
         String role = this.jwtService.extractRole(token);
         return new ResponseEntity<>(new LoginResponse(new TokenResponse(token), firstName, lastName, role), HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/logout", consumes = {"application/json"})
+    public ResponseEntity<?> logout(@RequestBody TokenForm tokenForm){
+        this.jwtService.tokens.remove(tokenForm.token());
+        return new ResponseEntity<>("Token deleted" ,HttpStatus.OK);
     }
 }

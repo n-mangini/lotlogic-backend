@@ -9,13 +9,13 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
-import java.util.Date;
+import java.util.*;
 import java.util.function.Function;
 
 @Service
 public class JwtService {
     public static final String SECRET_KEY = "38782F4125442A472D4B6150645367566B59703373367639792442264528482B";
-
+    public Map<String, Void> tokens = new HashMap<>();
     public String generateToken(UserLoginForm user, String role) {
         String jwtToken;
         jwtToken = Jwts.builder()
@@ -39,10 +39,6 @@ public class JwtService {
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
-    }
-
-    private Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
     }
 
     public String extractRole(String token) {

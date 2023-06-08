@@ -46,6 +46,10 @@ public class JwtFilter extends GenericFilterBean {
         request.setAttribute("claims", claims);
         request.setAttribute("blog", servletRequest.getParameter("id"));
 
+        if (!this.jwtService.tokens.containsKey(token)){
+            throw new ServletException("Token does not exist");
+        }
+
         if (role.equals(UserRole.ADMIN.toString())) {
             filterChain.doFilter(request, response);
         } else if (role.equals(UserRole.OWNER.toString()) && request.getServletPath().startsWith("/api/user/owner")) {
