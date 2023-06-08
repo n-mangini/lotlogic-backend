@@ -33,7 +33,7 @@ public class User {
     private UserRole role;
 
     @OneToMany(targetEntity = Parking.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "owner_id", referencedColumnName = "id")
     private List<Parking> parkings;
 
     @Column

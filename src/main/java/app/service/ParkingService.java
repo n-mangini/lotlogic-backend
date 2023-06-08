@@ -75,6 +75,14 @@ public class ParkingService {
         this.parkingRepository.save(parkingById);
     }
 
+    public Parking getParkingById(Long parkingId) {
+        Optional<Parking> parkingOptional = this.parkingRepository.findById(parkingId);
+        if (parkingOptional.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "parking " + parkingId + " not found");
+        }
+        return parkingOptional.get();
+    }
+
     public List<Parking> getAllParkings(Long userId) {
         Optional<User> userOptional = this.userRepository.findById(userId);
         if (userOptional.isEmpty()) {
@@ -82,6 +90,10 @@ public class ParkingService {
         }
         User user = userOptional.get();
         return user.getParkings();
+    }
+
+    public List<Parking> getAllParkingsOfEmployee(Long employeeId) {
+        return this.parkingRepository.findAllParkingsByEmployee(employeeId);
     }
 
     //only for admin

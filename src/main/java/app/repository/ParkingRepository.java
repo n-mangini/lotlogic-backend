@@ -25,4 +25,8 @@ public interface ParkingRepository extends JpaRepository<Parking, Long> {
 
     @Query("SELECT p.floors FROM Parking p WHERE p.id = ?1")
     List<Floor> findAllFloors(Long parkingId);
+
+
+@Query("SELECT p FROM Parking p WHERE p.employee.id = ?1")
+    List<Parking> findAllParkingsByEmployee(Long employeeId);
 }

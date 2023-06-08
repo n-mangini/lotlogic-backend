@@ -2,6 +2,7 @@ package app.controller;
 
 import app.model.Parking;
 import app.model.User;
+import app.model.dto.EmployeeAddForm;
 import app.model.dto.ParkingAddForm;
 import app.model.dto.ParkingEditForm;
 import app.model.dto.UserEditForm;
@@ -28,9 +29,9 @@ public class OwnerController {
     }
 
     @PostMapping(path = "/add-employee", consumes = {"application/json"})
-    public ResponseEntity<?> createEmployee(@RequestBody final User user) {
-        this.userService.saveEmployee(user);
-        return new ResponseEntity<>("employee " + user.getDni() + " created", HttpStatus.CREATED);
+    public ResponseEntity<?> createEmployee(@RequestBody final EmployeeAddForm employee) {
+        this.userService.saveEmployee(employee);
+        return new ResponseEntity<>("employee " + employee.user().getDni() + " created", HttpStatus.CREATED);
     }
 
     @DeleteMapping(path = "/delete-employee/{userId}")

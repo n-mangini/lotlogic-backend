@@ -33,6 +33,10 @@ public class Parking {
     @JoinColumn(name = "parking_id", referencedColumnName = "id")
     private List<Reservation> reservations;
 
+    @OneToOne(targetEntity = User.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "employee_id", referencedColumnName = "id")
+    private User employee;
+
     public Parking() {
 
     }
@@ -99,5 +103,13 @@ public class Parking {
 
     public void setReservations(List<Reservation> reservations) {
         this.reservations = reservations;
+    }
+
+    public User getEmployee() {
+        return this.employee;
+    }
+
+    public void setEmployee(User employee) {
+        this.employee = employee;
     }
 }

@@ -2,9 +2,11 @@ package app.controller;
 
 import app.model.Fee;
 import app.model.Floor;
+import app.model.Parking;
 import app.model.Reservation;
 import app.model.dto.ReservationAddForm;
 import app.model.dto.ReservationEditForm;
+import app.service.ParkingService;
 import app.service.ReservationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +19,11 @@ import java.util.List;
 @RequestMapping(path = "/api/user/employee")
 public class EmployeeController {
     private final ReservationService reservationService;
+    private final ParkingService parkingService;
 
-    public EmployeeController(ReservationService reservationService) {
+    public EmployeeController(ReservationService reservationService, ParkingService parkingService) {
         this.reservationService = reservationService;
+        this.parkingService = parkingService;
     }
 
     //check in
@@ -49,5 +53,10 @@ public class EmployeeController {
     @GetMapping(path = "floors/{parkingId}")
     public List<Floor> getAllFloors(@PathVariable Long parkingId){
         return this.reservationService.findAllFloors(parkingId);
+    }
+
+    @GetMapping(path = "panel-parkings/{employeeId}")
+    public List<Parking> getAllParkingsOfEmployee(@PathVariable Long employeeId) {
+        return this.parkingService.getAllParkingsOfEmployee(employeeId);
     }
 }

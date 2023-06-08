@@ -1,10 +1,13 @@
 package app.service;
 
+import app.model.Parking;
 import app.model.User;
 import app.model.UserRole;
+import app.model.dto.EmployeeAddForm;
 import app.model.dto.UserEditForm;
 import app.model.projection.UserProjection;
 import app.model.dto.UserLoginForm;
+import app.repository.ParkingRepository;
 import app.repository.UserRepository;
 import app.security.config.JwtService;
 import org.jetbrains.annotations.NotNull;
@@ -22,10 +25,14 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final JwtService jwtService;
+    private final ParkingService parkingService;
+    private final ParkingRepository parkingRepository;
 
-    public UserService(UserRepository userRepository, JwtService jwtService) {
+    public UserService(UserRepository userRepository, JwtService jwtService, ParkingService parkingService, ParkingRepository parkingRepository) {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
+        this.parkingService = parkingService;
+        this.parkingRepository = parkingRepository;
     }
 
     public String loginUser(@RequestBody @NotNull UserLoginForm user) {
@@ -57,13 +64,15 @@ public class UserService {
     }
     //TODO add possibility to have employee and owner with same dni then fix test exception msg
 
-    public void saveEmployee(@RequestBody @NotNull User user) {
-        final Optional<User> userByDni = this.userRepository.findByDni(user.getDni());
+    public void saveEmployee(@RequestBody @NotNull EmployeeAddForm employeeAddForm) {
+        final Optional<User> userByDni = this.userRepository.findByDni(employeeAddForm.user().getDni());
         if (userByDni.isEmpty()) {
-            if (user.getPassword().length() > 4)
+            if (employeeAddForm.user().getPassword().length() > 4)
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, "PIN must be 4 digit");
-            user.setRole(UserRole.EMPLOYEE);
-            this.userRepository.save(user);
+            employeeAddForm.user().setRole(UserRole.EMPLOYEE);
+            Parking parking = this.parkingService.getParkingById(employeeAddForm.parkingId());
+            parking.setEmployee(employeeAddForm.user());
+            this.parkingRepository.save(parking);
         } else {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "employee with DNI " + userByDni.get().getDni() + " already exists");
         }
@@ -139,7 +148,7 @@ public class UserService {
         return this.userRepository.findRoleByDni(dni);
     }
 
-    public User getUserById(Long id){
+    public User getUserById(Long id) {
         Optional<User> userOptional = this.userRepository.findById(id);
         if (userOptional.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user " + id + " not found");
