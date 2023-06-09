@@ -27,10 +27,11 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody UserLoginForm user) {
         String token = this.userService.loginUser(user);
+        String dni = this.jwtService.extractDni(token);
         String firstName = this.userService.getUserByDni(this.jwtService.extractDni(token)).getFirstName();
         String lastName = this.userService.getUserByDni(this.jwtService.extractDni(token)).getLastName();
         String role = this.jwtService.extractRole(token);
-        return new ResponseEntity<>(new LoginResponse(new TokenResponse(token), firstName, lastName, role), HttpStatus.OK);
+        return new ResponseEntity<>(new LoginResponse(new TokenResponse(token), dni, firstName, lastName, role), HttpStatus.OK);
     }
 
     @PostMapping(path = "/logout", consumes = {"application/json"})
