@@ -84,10 +84,10 @@ public class ParkingService {
         return parkingOptional.get();
     }
 
-    public List<Parking> getAllParkings(Long userId) {
-        Optional<User> userOptional = this.userRepository.findById(userId);
+    public List<Parking> getAllParkings(String ownerDni) {
+        Optional<User> userOptional = this.userRepository.findByDni(ownerDni);
         if (userOptional.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user " + userId + " not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user " + ownerDni + " not found");
         }
         User user = userOptional.get();
         return user.getParkings();

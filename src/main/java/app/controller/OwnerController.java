@@ -64,9 +64,9 @@ public class OwnerController {
         return new ResponseEntity<>("parking " + parkingId + " updated", HttpStatus.OK);
     }
 
-    @GetMapping(path = "panel-parkings/{userId}")
-    public List<Parking> getAllParkings(@PathVariable final Long userId) {
-        return this.parkingService.getAllParkings(userId);
+    @GetMapping(path = "panel-parkings/{ownerDni}")
+    public List<Parking> getAllParkings(@PathVariable final String ownerDni) {
+        return this.parkingService.getAllParkings(ownerDni);
     }
 
     //TODO get all employees from his parkings
