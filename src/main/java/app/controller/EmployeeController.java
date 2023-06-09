@@ -2,10 +2,10 @@ package app.controller;
 
 import app.model.Fee;
 import app.model.Floor;
-import app.model.Parking;
 import app.model.Reservation;
 import app.model.dto.ReservationAddForm;
 import app.model.dto.ReservationEditForm;
+import app.model.projection.ParkingProjection;
 import app.service.ParkingService;
 import app.service.ReservationService;
 import org.springframework.http.HttpStatus;
@@ -55,8 +55,8 @@ public class EmployeeController {
         return this.reservationService.findAllFloors(parkingId);
     }
 
-    @GetMapping(path = "panel-parkings/{employeeId}")
-    public List<Parking> getAllParkingsOfEmployee(@PathVariable Long employeeId) {
-        return this.parkingService.getAllParkingsOfEmployee(employeeId);
+    @GetMapping(path = "panel-parkings/{employeeDni}")
+    public List<ParkingProjection> getAllParkingsOfEmployee(@PathVariable String employeeDni) {
+        return this.parkingService.getAllParkingsOfEmployee(employeeDni);
     }
 }

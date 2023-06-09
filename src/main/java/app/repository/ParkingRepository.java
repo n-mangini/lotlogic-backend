@@ -3,6 +3,7 @@ package app.repository;
 import app.model.Fee;
 import app.model.Floor;
 import app.model.Parking;
+import app.model.projection.ParkingProjection;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,7 +19,7 @@ public interface ParkingRepository extends JpaRepository<Parking, Long> {
     Optional<Parking> findByAddress(String address);
 
     @Query("SELECT p FROM Parking p WHERE p.active = true")
-    List<Parking> findAllParkings();
+    List<ParkingProjection> findAllParkings();
 
     @Query("SELECT p.fees from Parking p WHERE p.id = ?1")
     List<Fee> findAllFees(Long parkingId);
@@ -27,6 +28,6 @@ public interface ParkingRepository extends JpaRepository<Parking, Long> {
     List<Floor> findAllFloors(Long parkingId);
 
 
-@Query("SELECT p FROM Parking p WHERE p.employee.id = ?1")
-    List<Parking> findAllParkingsByEmployee(Long employeeId);
+@Query("SELECT p FROM Parking p WHERE p.employee.dni = ?1")
+    List<ParkingProjection> findAllParkingsByEmployee(String employeeDni);
 }

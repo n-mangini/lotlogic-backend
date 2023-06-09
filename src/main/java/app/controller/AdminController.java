@@ -4,6 +4,7 @@ import app.model.Parking;
 import app.model.Reservation;
 import app.model.User;
 import app.model.dto.UserEditForm;
+import app.model.projection.ParkingProjection;
 import app.model.projection.UserProjection;
 import app.service.ParkingService;
 import app.service.ReservationService;
@@ -60,17 +61,12 @@ public class AdminController {
     }
 
     @GetMapping(path = "panel-parkings")
-    public List<Parking> getAllParkings() {
+    public List<ParkingProjection> getAllParkings() {
         return this.parkingService.getAllParkings();
     }
 
-    @GetMapping(path = "panel-reservations-current")
-    public List<Reservation> getAllCurrentReservations(){
-        return this.reservationService.findAllCurrentReservations();
-    }
-
-    @GetMapping(path = "panel-reservations-old")
-    public List<Reservation> getAllOldReservations(){
-        return this.reservationService.findAllOldReservations();
+    @GetMapping(path = "panel-reservations")
+    public List<Reservation> getAllReservations(){
+        return this.reservationService.findAllReservations();
     }
 }

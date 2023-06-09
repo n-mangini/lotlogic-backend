@@ -30,7 +30,7 @@ public class Reservation {
     private String exitDate;
 
     @Column
-        private String vehicleFee;
+    private Long fee;
 
     @JsonIgnore
     @ManyToOne
@@ -40,21 +40,21 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(Long id, int floor, String vehiclePlate, String vehicleModel, String vehicleFee, String entryDate, String exitDate) {
+    public Reservation(Long id, int floor, String vehiclePlate, String vehicleModel, Long vehicleFee, String entryDate, String exitDate) {
         this.id = id;
         this.floor = floor;
         this.vehiclePlate = vehiclePlate;
         this.vehicleModel = vehicleModel;
-        this.vehicleFee = vehicleFee;
+        this.fee = vehicleFee;
         this.entryDate = entryDate;
         this.exitDate = exitDate;
     }
 
-    public Reservation(int floor, String vehiclePlate, String vehicleModel, String vehicleFee, String entryDate, String exitDate) {
+    public Reservation(int floor, String vehiclePlate, String vehicleModel, Long vehicleFee, String entryDate, String exitDate) {
         this.floor = floor;
         this.vehiclePlate = vehiclePlate;
         this.vehicleModel = vehicleModel;
-        this.vehicleFee = vehicleFee;
+        this.fee = vehicleFee;
         this.entryDate = entryDate;
         this.exitDate = exitDate;
     }
@@ -79,24 +79,16 @@ public class Reservation {
         return this.vehiclePlate;
     }
 
-    public void setVehiclePlate(String carPlate) {
-        this.vehiclePlate = carPlate;
+    public void setVehiclePlate(String vehiclePlate) {
+        this.vehiclePlate = vehiclePlate;
     }
 
     public String getVehicleModel() {
         return this.vehicleModel;
     }
 
-    public void setVehicleModel(String carModel) {
-        this.vehicleModel = carModel;
-    }
-
-    public String getVehicleFee() {
-        return this.vehicleFee;
-    }
-
-    public void setVehicleFee(String carType) {
-        this.vehicleFee = carType;
+    public void setVehicleModel(String vehicleModel) {
+        this.vehicleModel = vehicleModel;
     }
 
     public String getEntryDate() {
@@ -113,6 +105,14 @@ public class Reservation {
 
     public void setExitDate(String exitDate) {
         this.exitDate = exitDate;
+    }
+
+    public Long getFee() {
+        return this.fee;
+    }
+
+    public void setFee(Long vehicleFee) {
+        this.fee = vehicleFee;
     }
 
     public Parking getParking() {

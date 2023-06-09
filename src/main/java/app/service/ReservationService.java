@@ -6,6 +6,7 @@ import app.model.Parking;
 import app.model.Reservation;
 import app.model.dto.ReservationAddForm;
 import app.model.dto.ReservationEditForm;
+import app.repository.FloorRepository;
 import app.repository.ParkingRepository;
 import app.repository.ReservationRepository;
 import org.springframework.http.HttpStatus;
@@ -22,10 +23,12 @@ import java.util.Optional;
 public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final ParkingRepository parkingRepository;
+    private final FloorRepository floorRepository;
 
-    public ReservationService(ReservationRepository reservationRepository, ParkingRepository parkingRepository) {
+    public ReservationService(ReservationRepository reservationRepository, ParkingRepository parkingRepository, FloorRepository floorRepository) {
         this.reservationRepository = reservationRepository;
         this.parkingRepository = parkingRepository;
+        this.floorRepository = floorRepository;
     }
 
     public void saveReservation(ReservationAddForm reservationAddForm) {
@@ -35,37 +38,19 @@ public class ReservationService {
         } else {
             Parking parking = parkingOptional.get();
             //throw if parking floor is disabled
-            if (!parking.getFloors().get(reservationAddForm.floor() - 1).isEnabled()) {
+            if (!this.floorRepository.findById(reservationAddForm.floor()).get().isEnabled()) {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "floor " + reservationAddForm.floor() + " is not enabled");
-            }
-            //throws exception when tries to create reservation(check in) in floor which doesn't exist in parking
-            if (parking.getFloors().size() < reservationAddForm.floor()) {
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "parking doesnt have floor" + reservationAddForm.floor());
-            }
-            //throws when amount of reservations in that floor [cars] are >= than slots number
-            if (findAllCurrentReservations(reservationAddForm.parkingId()).size() >= parking.getFloors().get(reservationAddForm.floor() - 1).getSlotsNumber()) {
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "floor " + reservationAddForm.floor() + " is full");
             }
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
             LocalDateTime date = LocalDateTime.now();
-            parking.getReservations().add(new Reservation(reservationAddForm.floor(), reservationAddForm.vehiclePlate(), reservationAddForm.vehicleModel(), reservationAddForm.vehicleFee(), dtf.format(date), null));
+            parking.getReservations().add(new Reservation(reservationAddForm.floor().intValue(), reservationAddForm.vehiclePlate(), reservationAddForm.vehicleModel(), reservationAddForm.fee(), dtf.format(date), null));
             this.parkingRepository.save(parking);
         }
     }
 
-    public List<Reservation> findAllCurrentReservations(Long parkingId) {
-        return this.reservationRepository.findAllCurrentReservations(parkingId);
-    }
-
-    public List<Reservation> findAllCurrentReservations() {
-        return this.reservationRepository.findAllCurrentReservations();
-    }
-
-    public List<Reservation> findAllOldReservations() {
-        return this.reservationRepository.findAllOldReservations();
-    }
 
     //TODO
+
     public void updateReservation(ReservationEditForm reservationEditForm, Long reservationId) {
         Optional<Parking> parkingOptional = this.parkingRepository.findById(reservationEditForm.parkingId());
         if (parkingOptional.isEmpty()) {
@@ -83,6 +68,14 @@ public class ReservationService {
         LocalDateTime date = LocalDateTime.now();
         reservation.setExitDate(dtf.format(date));
         this.reservationRepository.save(reservation);
+    }
+
+    public List<Reservation> findAllCurrentReservations(Long parkingId) {
+        return this.reservationRepository.findAllCurrentReservations(parkingId);
+    }
+
+    public List<Reservation> findAllReservations() {
+        return this.reservationRepository.findAllReservations();
     }
 
     public List<Fee> findAllFees(Long parkingId) {

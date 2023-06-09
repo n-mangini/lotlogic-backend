@@ -4,6 +4,7 @@ import app.model.Parking;
 import app.model.User;
 import app.model.dto.ParkingAddForm;
 import app.model.dto.ParkingEditForm;
+import app.model.projection.ParkingProjection;
 import app.repository.ParkingRepository;
 import app.repository.UserRepository;
 import org.jetbrains.annotations.NotNull;
@@ -92,12 +93,12 @@ public class ParkingService {
         return user.getParkings();
     }
 
-    public List<Parking> getAllParkingsOfEmployee(Long employeeId) {
-        return this.parkingRepository.findAllParkingsByEmployee(employeeId);
+    public List<ParkingProjection> getAllParkingsOfEmployee(String employeeDni) {
+        return this.parkingRepository.findAllParkingsByEmployee(employeeDni);
     }
 
     //only for admin
-    public List<Parking> getAllParkings() {
+    public List<ParkingProjection> getAllParkings() {
         return this.parkingRepository.findAllParkings();
     }
 }
