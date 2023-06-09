@@ -42,6 +42,11 @@ public class EmployeeController {
 
     @GetMapping(path = "panel-reservations/{parkingId}")
     public List<Reservation> getAllReservations(@PathVariable Long parkingId){
+        return this.reservationService.findAllReservations(parkingId);
+    }
+
+    @GetMapping(path = "panel-reservations-current/{parkingId}")
+    public List<Reservation> getAllCurrentReservations(@PathVariable Long parkingId){
         return this.reservationService.findAllCurrentReservations(parkingId);
     }
 

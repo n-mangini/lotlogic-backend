@@ -64,19 +64,25 @@ public class ReservationService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "reservation not found");
         }
         Reservation reservation = reservationOptional.get();
+        if (reservation.getExitDate() != null){
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "reservation already ended");
+        }
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime date = LocalDateTime.now();
         reservation.setExitDate(dtf.format(date));
         this.reservationRepository.save(reservation);
     }
 
-    public List<Reservation> findAllCurrentReservations(Long parkingId) {
-        return this.reservationRepository.findAllCurrentReservations(parkingId);
-    }
-
     public List<Reservation> findAllReservations() {
         return this.reservationRepository.findAllReservations();
     }
+
+    public List<Reservation> findAllReservations(Long parkingId) {
+        return this.reservationRepository.findAllReservations(parkingId);
+    }
+
+    public List<Reservation> findAllCurrentReservations(Long parkingId) {
+        return this.reservationRepository.findAllCurrentReservations(parkingId);    }
 
     public List<Fee> findAllFees(Long parkingId) {
         return this.parkingRepository.findAllFees(parkingId);
