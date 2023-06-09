@@ -15,7 +15,7 @@ public class Reservation {
     private Long id;
 
     @Column
-    private int floor;
+    private int floorId;
 
     @Column
     private String vehiclePlate;
@@ -30,7 +30,7 @@ public class Reservation {
     private String exitDate;
 
     @Column
-    private Long fee;
+    private Long feeId;
 
     @JsonIgnore
     @ManyToOne
@@ -40,21 +40,21 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(Long id, int floor, String vehiclePlate, String vehicleModel, Long vehicleFee, String entryDate, String exitDate) {
+    public Reservation(Long id, int floorId, String vehiclePlate, String vehicleModel, Long vehicleFee, String entryDate, String exitDate) {
         this.id = id;
-        this.floor = floor;
+        this.floorId = floorId;
         this.vehiclePlate = vehiclePlate;
         this.vehicleModel = vehicleModel;
-        this.fee = vehicleFee;
+        this.feeId = vehicleFee;
         this.entryDate = entryDate;
         this.exitDate = exitDate;
     }
 
-    public Reservation(int floor, String vehiclePlate, String vehicleModel, Long vehicleFee, String entryDate, String exitDate) {
-        this.floor = floor;
+    public Reservation(int floorId, String vehiclePlate, String vehicleModel, Long vehicleFee, String entryDate, String exitDate) {
+        this.floorId = floorId;
         this.vehiclePlate = vehiclePlate;
         this.vehicleModel = vehicleModel;
-        this.fee = vehicleFee;
+        this.feeId = vehicleFee;
         this.entryDate = entryDate;
         this.exitDate = exitDate;
     }
@@ -67,12 +67,12 @@ public class Reservation {
         this.id = id;
     }
 
-    public int getFloor() {
-        return this.floor;
+    public int getFloorId() {
+        return this.floorId;
     }
 
-    public void setFloor(int floor) {
-        this.floor = floor;
+    public void setFloorId(int floor) {
+        this.floorId = floor;
     }
 
     public String getVehiclePlate() {
@@ -107,12 +107,12 @@ public class Reservation {
         this.exitDate = exitDate;
     }
 
-    public Long getFee() {
-        return this.fee;
+    public Long getFeeId() {
+        return this.feeId;
     }
 
-    public void setFee(Long vehicleFee) {
-        this.fee = vehicleFee;
+    public void setFeeId(Long vehicleFee) {
+        this.feeId = vehicleFee;
     }
 
     public Parking getParking() {
