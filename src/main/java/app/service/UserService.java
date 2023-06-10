@@ -3,7 +3,6 @@ package app.service;
 import app.model.Parking;
 import app.model.User;
 import app.model.UserRole;
-import app.model.dto.EmployeeAddForm;
 import app.model.dto.UserEditForm;
 import app.model.projection.UserProjection;
 import app.model.dto.UserLoginForm;
@@ -66,14 +65,14 @@ public class UserService {
     }
     //TODO add possibility to have employee and owner with same dni then fix test exception msg
 
-    public void saveEmployee(@RequestBody @NotNull EmployeeAddForm employeeAddForm) {
-        final Optional<User> userByDni = this.userRepository.findByDni(employeeAddForm.user().getDni());
+    public void saveEmployee(@NotNull User employee, Long parkingId) {
+        final Optional<User> userByDni = this.userRepository.findByDni(employee.getDni());
         if (userByDni.isEmpty()) {
-            if (employeeAddForm.user().getPassword().length() > 4)
+            if (employee.getPassword().length() > 4)
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, "PIN must be 4 digit");
-            employeeAddForm.user().setRole(UserRole.EMPLOYEE);
-            Parking parking = this.parkingService.getParkingById(employeeAddForm.parkingId());
-            parking.setEmployee(employeeAddForm.user());
+            employee.setRole(UserRole.EMPLOYEE);
+            Parking parking = this.parkingService.getParkingById(parkingId);
+            parking.setEmployee(employee);
             this.parkingRepository.save(parking);
         } else {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "employee with DNI " + userByDni.get().getDni() + " already exists");

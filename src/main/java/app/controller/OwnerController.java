@@ -3,7 +3,6 @@ package app.controller;
 import app.model.Parking;
 import app.model.Reservation;
 import app.model.User;
-import app.model.dto.EmployeeAddForm;
 import app.model.dto.ParkingAddForm;
 import app.model.dto.ParkingEditForm;
 import app.model.dto.UserEditForm;
@@ -32,10 +31,10 @@ public class OwnerController {
         this.reservationService = reservationService;
     }
 
-    @PostMapping(path = "/add-employee", consumes = {"application/json"})
-    public ResponseEntity<?> createEmployee(@RequestBody final EmployeeAddForm employee) {
-        this.userService.saveEmployee(employee);
-        return new ResponseEntity<>("employee " + employee.user().getDni() + " created", HttpStatus.CREATED);
+    @PostMapping(path = "/add-employee/{parkingId}", consumes = {"application/json"})
+    public ResponseEntity<?> createEmployee(@PathVariable Long parkingId, @RequestBody final User employee) {
+        this.userService.saveEmployee(employee, parkingId);
+        return new ResponseEntity<>("employee " + employee.getDni() + " created", HttpStatus.CREATED);
     }
 
     @DeleteMapping(path = "/delete-employee/{userId}")
