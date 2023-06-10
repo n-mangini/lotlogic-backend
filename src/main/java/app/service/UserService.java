@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Component
@@ -166,6 +168,17 @@ public class UserService {
 
     public List<User> getAllEmployees() {
         return this.userRepository.findAllEmployees();
+    }
+
+    public List<User> getAllEmployees(String ownerDni) {
+        Optional<User> userOptional = this.userRepository.findByDni(ownerDni);
+        if (userOptional.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user " + ownerDni + " not found");
+        }
+        return userOptional.get().getParkings().stream()
+                .map(Parking::getEmployee)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     public List<UserProjection> getAllOwners() {

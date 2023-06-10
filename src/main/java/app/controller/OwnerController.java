@@ -1,12 +1,14 @@
 package app.controller;
 
 import app.model.Parking;
+import app.model.Reservation;
 import app.model.User;
 import app.model.dto.EmployeeAddForm;
 import app.model.dto.ParkingAddForm;
 import app.model.dto.ParkingEditForm;
 import app.model.dto.UserEditForm;
 import app.service.ParkingService;
+import app.service.ReservationService;
 import app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,11 +23,13 @@ import java.util.List;
 public class OwnerController {
     private final UserService userService;
     private final ParkingService parkingService;
+    private final ReservationService reservationService;
 
     @Autowired
-    public OwnerController(final UserService userService, ParkingService parkingService) {
+    public OwnerController(final UserService userService, ParkingService parkingService, ReservationService reservationService) {
         this.userService = userService;
         this.parkingService = parkingService;
+        this.reservationService = reservationService;
     }
 
     @PostMapping(path = "/add-employee", consumes = {"application/json"})
@@ -69,9 +73,14 @@ public class OwnerController {
         return this.parkingService.getAllParkings(ownerDni);
     }
 
+    @GetMapping(path = "panel-reservations/{ownerDni}")
+    public List<Reservation> getAllReservations(@PathVariable final String ownerDni){
+        return this.reservationService.findAllReservations(ownerDni);
+    }
+
     //TODO get all employees from his parkings
-    @GetMapping(path = "panel-employees")
-    public List<User> getAllEmployees() {
-        return this.userService.getAllEmployees();
+    @GetMapping(path = "panel-employees/{ownerDni}")
+    public List<User> getAllEmployees(@PathVariable final String ownerDni) {
+        return this.userService.getAllEmployees(ownerDni);
     }
 }
