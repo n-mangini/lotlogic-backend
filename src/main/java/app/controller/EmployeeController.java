@@ -40,9 +40,9 @@ public class EmployeeController {
         return new ResponseEntity<>("checkout successful", HttpStatus.OK);
     }
 
-    @GetMapping(path = "panel-reservations/{employeeDni}")
-    public List<Reservation> getAllReservations(@PathVariable String employeeDni){
-        return this.reservationService.findAllReservations(employeeDni);
+    @GetMapping(path = "panel-reservations/{parkingId}")
+    public List<Reservation> getAllReservations(@PathVariable Long parkingId){
+        return this.reservationService.findAllReservations(parkingId);
     }
 
     @GetMapping(path = "panel-reservations-current/{parkingId}")
