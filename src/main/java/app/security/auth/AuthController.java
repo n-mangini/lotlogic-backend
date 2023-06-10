@@ -1,5 +1,6 @@
 package app.security.auth;
 
+import app.model.UserRole;
 import app.model.dto.TokenForm;
 import app.security.config.JwtService;
 import app.security.model.response.LoginResponse;
@@ -31,7 +32,11 @@ public class AuthController {
         String firstName = this.userService.getUserByDni(this.jwtService.extractDni(token)).getFirstName();
         String lastName = this.userService.getUserByDni(this.jwtService.extractDni(token)).getLastName();
         String role = this.jwtService.extractRole(token);
-        return new ResponseEntity<>(new LoginResponse(new TokenResponse(token), dni, firstName, lastName, role), HttpStatus.OK);
+        if (role.equals(UserRole.EMPLOYEE.toString())){
+            Long parkingId = this.userService.getParkingOfEmployeeByDni(dni);
+            return new ResponseEntity<>(new LoginResponse(new TokenResponse(token), dni, firstName, lastName, role, parkingId), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new LoginResponse(new TokenResponse(token), dni, firstName, lastName, role, -1L), HttpStatus.OK);
     }
 
     @PostMapping(path = "/logout", consumes = {"application/json"})

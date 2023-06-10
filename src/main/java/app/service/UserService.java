@@ -183,4 +183,8 @@ public class UserService {
     public List<UserProjection> getAllOwners() {
         return this.userRepository.findAllByActiveAndRole(true, UserRole.OWNER);
     }
+
+    public Long getParkingOfEmployeeByDni(String dni) {
+        return this.parkingRepository.findParkingOfEmployeeByDni(dni);
+    }
 }
