@@ -56,7 +56,7 @@ public class UserService {
         final Optional<User> userByDni = this.userRepository.findByDni(user.getDni());
         if (userByDni.isEmpty()) {
             if (user.getPassword().length() <= 4)
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "password is too short");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "password is too short");
             user.setRole(UserRole.OWNER);
             this.userRepository.save(user);
         } else {
@@ -69,7 +69,7 @@ public class UserService {
         final Optional<User> userByDni = this.userRepository.findByDni(employee.getDni());
         if (userByDni.isEmpty()) {
             if (employee.getPassword().length() > 4)
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "PIN must be 4 digit");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "PIN must be 4 digit");
             employee.setRole(UserRole.EMPLOYEE);
             Parking parking = this.parkingService.getParkingById(parkingId);
             parking.setEmployee(employee);

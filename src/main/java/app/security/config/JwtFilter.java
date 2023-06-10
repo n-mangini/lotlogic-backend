@@ -9,8 +9,10 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 
@@ -47,7 +49,8 @@ public class JwtFilter extends GenericFilterBean {
         request.setAttribute("blog", servletRequest.getParameter("id"));
 
         if (!this.jwtService.tokens.containsKey(token)) {
-            throw new ServletException("Token does not exist");
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid or expired token");
+            return;
         }
 
         if (role.equals(UserRole.ADMIN.toString())) {
@@ -57,7 +60,7 @@ public class JwtFilter extends GenericFilterBean {
         } else if (role.equals(UserRole.EMPLOYEE.toString()) && request.getServletPath().startsWith("/api/user/employee")) {
             filterChain.doFilter(request, response);
         } else {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have sufficient privileges to perform this operation.");
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You do not have sufficient privileges to perform this operation.");
         }
     }
 }
