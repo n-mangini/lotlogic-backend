@@ -15,7 +15,7 @@ public class User {
     @Column
     private Long id;
 
-    @Column(length = 9)
+    @Column(length = 8)
     private String dni;
 
     @Column(length = 46)

@@ -57,6 +57,8 @@ public class UserService {
         if (userByDni.isEmpty()) {
             if (user.getPassword().length() <= 4)
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "password is too short");
+            if (user.getDni().length() > 8)
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "DNI must be 8 digit");
             user.setRole(UserRole.OWNER);
             this.userRepository.save(user);
         } else {
@@ -70,6 +72,8 @@ public class UserService {
         if (userByDni.isEmpty()) {
             if (employee.getPassword().length() > 4)
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "PIN must be 4 digit");
+            if (employee.getDni().length() > 8)
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "DNI must be 8 digit");
             employee.setRole(UserRole.EMPLOYEE);
             Parking parking = this.parkingService.getParkingById(parkingId);
             parking.setEmployee(employee);
@@ -113,6 +117,10 @@ public class UserService {
         final Optional<User> findUserById = this.userRepository.findById(userId);
         if (findUserById.isPresent()) {
             User userById = findUserById.get();
+            if (userEditForm.password().length() <= 4)
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "password is too short");
+            if (userEditForm.dni().length() > 8)
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "DNI must be 8 digit");
             if ((userById.getRole().equals(UserRole.OWNER))) {
                 userById.setDni(userEditForm.dni());
                 userById.setFirstName(userEditForm.firstName());
@@ -131,6 +139,10 @@ public class UserService {
         final Optional<User> findUserById = this.userRepository.findById(userId);
         if (findUserById.isPresent()) {
             User userById = findUserById.get();
+            if (userEditForm.password().length() > 4)
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "PIN must be 4 digit");
+            if (userEditForm.dni().length() > 8)
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "DNI must be 8 digit");
             if (userById.getRole().equals(UserRole.EMPLOYEE)) {
                 userById.setDni(userEditForm.dni());
                 userById.setFirstName(userEditForm.firstName());
