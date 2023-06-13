@@ -72,12 +72,27 @@ public class ReservationService {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime date = LocalDateTime.now();
         reservation.setExitDate(dtf.format(date));
-        Integer price = calculateReservationPrice(reservationId);
-        reservation.setAmount(price);
         this.reservationRepository.save(reservation);
     }
 
-    public Integer calculateReservationPrice(Long reservationId) {
+    //when exit car is set //just set reservation price
+    public Reservation createTicket(Long reservationId) {
+        Optional<Reservation> reservationOptional = this.reservationRepository.findById(reservationId);
+
+        if (reservationOptional.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "reservation not found");
+        }
+        Reservation reservation = reservationOptional.get();
+        if (reservation.getExitDate() != null) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "reservation already ended");
+        }
+        Double price = calculateReservationPrice(reservationId);
+        reservation.setAmount(price);
+        this.reservationRepository.save(reservation);
+        return reservation;
+    }
+
+    public Double calculateReservationPrice(Long reservationId) {
         Optional<Reservation> reservationOptional = this.reservationRepository.findById(reservationId);
         if (reservationOptional.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "reservation " + reservationId + " not found");
@@ -91,7 +106,7 @@ public class ReservationService {
             long hours = duration.toHours();
 
             Fee reservationFee = this.feeRepository.findById(reservation.getFeeId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Fee " + reservation.getFeeId() + "not found"));
-            return Math.toIntExact(reservationFee.getFeePrice() * hours);
+            return (double) (reservationFee.getFeePrice() * hours);
         }
     }
 
