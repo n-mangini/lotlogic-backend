@@ -33,6 +33,11 @@ public class EmployeeController {
         return new ResponseEntity<>("reservation created", HttpStatus.CREATED);
     }
 
+    @GetMapping(path = "/reservation-price/{reservationId}")
+    public Integer getReservationPrice(@PathVariable Long reservationId){
+        return this.reservationService.calculateReservationPrice(reservationId);
+    }
+
     // check out -> sets exitDate to currentDate()
     @PutMapping(path = "/check-out-car/{reservationId}")
     public ResponseEntity<?> endReservation(@RequestBody ReservationEditForm reservationEditForm, @PathVariable Long reservationId){

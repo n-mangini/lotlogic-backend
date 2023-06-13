@@ -3,16 +3,15 @@ package app.service;
 import app.model.*;
 import app.model.dto.ReservationAddForm;
 import app.model.dto.ReservationEditForm;
-import app.repository.FloorRepository;
-import app.repository.ParkingRepository;
-import app.repository.ReservationRepository;
-import app.repository.UserRepository;
+import app.repository.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -24,12 +23,14 @@ public class ReservationService {
     private final ParkingRepository parkingRepository;
     private final FloorRepository floorRepository;
     private final UserRepository userRepository;
+    private final FeeRepository feeRepository;
 
-    public ReservationService(ReservationRepository reservationRepository, ParkingRepository parkingRepository, FloorRepository floorRepository, UserRepository userRepository) {
+    public ReservationService(ReservationRepository reservationRepository, ParkingRepository parkingRepository, FloorRepository floorRepository, UserRepository userRepository, FeeRepository feeRepository) {
         this.reservationRepository = reservationRepository;
         this.parkingRepository = parkingRepository;
         this.floorRepository = floorRepository;
         this.userRepository = userRepository;
+        this.feeRepository = feeRepository;
     }
 
     public void saveReservation(ReservationAddForm reservationAddForm) {
@@ -65,13 +66,33 @@ public class ReservationService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "reservation not found");
         }
         Reservation reservation = reservationOptional.get();
-        if (reservation.getExitDate() != null){
+        if (reservation.getExitDate() != null) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "reservation already ended");
         }
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime date = LocalDateTime.now();
         reservation.setExitDate(dtf.format(date));
+        Integer price = calculateReservationPrice(reservationId);
+        reservation.setAmount(price);
         this.reservationRepository.save(reservation);
+    }
+
+    public Integer calculateReservationPrice(Long reservationId) {
+        Optional<Reservation> reservationOptional = this.reservationRepository.findById(reservationId);
+        if (reservationOptional.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "reservation " + reservationId + " not found");
+        } else {
+            Reservation reservation = reservationOptional.get();
+            String entryDate = reservation.getEntryDate();
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+
+            LocalDateTime dateTime1 = LocalDateTime.parse(entryDate, dtf);
+            Duration duration = Duration.between(dateTime1, LocalDateTime.now());
+            long hours = duration.toHours();
+
+            Fee reservationFee = this.feeRepository.findById(reservation.getFeeId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Fee " + reservation.getFeeId() + "not found"));
+            return Math.toIntExact(reservationFee.getFeePrice() * hours);
+        }
     }
 
     public List<Reservation> findAllReservations() {
@@ -84,8 +105,8 @@ public class ReservationService {
 
     public List<Reservation> findAllReservations(String ownerDni) {
         final Optional<User> userOptional = this.userRepository.findByDni(ownerDni);
-        if (userOptional.isEmpty()){
-            throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "user " + ownerDni + " not found");
+        if (userOptional.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user " + ownerDni + " not found");
         }
         return userOptional.get().getParkings().stream()
                 .flatMap(parking -> parking.getReservations().stream())
@@ -93,7 +114,8 @@ public class ReservationService {
     }
 
     public List<Reservation> findAllCurrentReservations(Long parkingId) {
-        return this.reservationRepository.findAllCurrentReservations(parkingId);    }
+        return this.reservationRepository.findAllCurrentReservations(parkingId);
+    }
 
     public List<Fee> findAllFees(Long parkingId) {
         return this.parkingRepository.findAllFees(parkingId);

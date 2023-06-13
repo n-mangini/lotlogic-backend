@@ -32,6 +32,9 @@ public class Reservation {
     @Column
     private Long feeId;
 
+    @Column
+    private Integer amount;
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "parking_id")
@@ -121,5 +124,13 @@ public class Reservation {
 
     public void setParking(Parking parking) {
         this.parking = parking;
+    }
+
+    public Integer getAmount() {
+        return this.amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
     }
 }
