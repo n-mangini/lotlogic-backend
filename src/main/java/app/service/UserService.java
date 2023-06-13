@@ -189,6 +189,7 @@ public class UserService {
         return userOptional.get().getParkings().stream()
                 .map(Parking::getEmployee)
                 .filter(Objects::nonNull)
+                .filter(user -> user.isActive()) // Filter for active users
                 .collect(Collectors.toList());
     }
 

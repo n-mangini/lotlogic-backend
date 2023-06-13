@@ -77,9 +77,13 @@ public class OwnerController {
         return this.reservationService.findAllReservations(ownerDni);
     }
 
-    //TODO get all employees from his parkings
     @GetMapping(path = "panel-employees/{ownerDni}")
     public List<User> getAllEmployees(@PathVariable final String ownerDni) {
         return this.userService.getAllEmployees(ownerDni);
+    }
+
+    @GetMapping(path = "employee-info/{employeeDni}")
+    public User getEmployee(@PathVariable final String employeeDni){
+        return this.userService.getUserByDni(employeeDni);
     }
 }
