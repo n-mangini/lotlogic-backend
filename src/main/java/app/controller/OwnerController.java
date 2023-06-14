@@ -86,4 +86,9 @@ public class OwnerController {
     public User getEmployee(@PathVariable final String employeeDni){
         return this.userService.getUserByDni(employeeDni);
     }
+
+    @GetMapping(path = "get-parking/{parkingId}")
+    public Parking getEmployee(@PathVariable final Long parkingId){
+        return this.parkingService.getParkingById(parkingId);
+    }
 }

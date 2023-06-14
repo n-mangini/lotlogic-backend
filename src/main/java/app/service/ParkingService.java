@@ -58,14 +58,7 @@ public class ParkingService {
 
     //TODO check if parking is updated only by the owner or ADMIN
     public void updateParking(@NotNull Long parkingId, @NotNull ParkingEditForm parkingEditForm) {
-        final Optional<User> userOptional = this.userRepository.findByDni(parkingEditForm.dni());
-        if (userOptional.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user " + parkingId + " not found");
-        }
-        User user = userOptional.get();
-        Optional<Parking> parkingOptional = user.getParkings().stream()
-                .filter(parking -> parking.getId() == parkingId)
-                .findFirst();
+        Optional<Parking> parkingOptional = this.parkingRepository.findById(parkingId);
         if (parkingOptional.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "parking " + parkingId + " not found");
         }
