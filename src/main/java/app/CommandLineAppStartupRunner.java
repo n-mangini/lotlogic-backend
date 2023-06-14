@@ -30,11 +30,11 @@ CommandLineAppStartupRunner implements CommandLineRunner {
     @Override
     public void run(String... args) {
         //user
-        User ADMIN = new User("ADMIN", "ADMIN", "ADMIN", "123456");
+        User ADMIN = new User("29309283", "ADMIN", "ADMIN", "123456");
         ADMIN.setRole(UserRole.ADMIN);
-        User OWNER = new User("OWNER", "OWNER", "OWNER", "123456");
+        User OWNER = new User("41839440", "OWNER", "OWNER", "123456");
         OWNER.setRole(UserRole.OWNER);
-        User EMPLOYEE = new User("EMPLOYEE", "EMPLOYEE", "EMPLOYEE", "1234");
+        User EMPLOYEE = new User("47281922", "EMPLOYEE", "EMPLOYEE", "1234");
         EMPLOYEE.setRole(UserRole.EMPLOYEE);
         User owner1 = new User("20000000", "Martin", "Garabal", "123456");
         owner1.setRole(UserRole.OWNER);
