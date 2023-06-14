@@ -18,4 +18,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     @Query("SELECT r FROM Reservation r WHERE r.parking.id = ?1 AND r.exitDate = NULL")
     List<Reservation> findAllCurrentReservations(Long parkingId);
+
+    @Query("SELECT r FROM Reservation r WHERE r.parking.id = ?1 AND r.exitDate = NULL AND r.floorId = ?2")
+    List<Reservation> findAllCurrentReservationsPerFloor(Long parkingId, Long floorId);
 }

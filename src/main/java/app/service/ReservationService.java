@@ -43,6 +43,13 @@ public class ReservationService {
             if (!this.floorRepository.findById(reservationAddForm.floor()).get().isEnabled()) {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "floor " + reservationAddForm.floor() + " is not enabled");
             }
+
+            int reservationsPerFloor = this.reservationRepository.findAllCurrentReservationsPerFloor(reservationAddForm.parkingId(), reservationAddForm.floor()).size();
+            int floorSlots = this.floorRepository.findById(reservationAddForm.floor()).get().getSlotsNumber();
+            if (reservationsPerFloor >= floorSlots){
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "floor " + reservationAddForm.floor() + " is full");
+            }
+
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
             LocalDateTime date = LocalDateTime.now();
             parking.getReservations().add(new Reservation(reservationAddForm.floor().intValue(), reservationAddForm.vehiclePlate(), reservationAddForm.vehicleModel(), reservationAddForm.fee(), dtf.format(date), null));
