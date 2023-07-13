@@ -11,10 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -144,6 +141,13 @@ public class ReservationService {
     }
 
     public List<Floor> findAllFloors(Long parkingId) {
-        return this.parkingRepository.findAllFloors(parkingId);
+        List<Floor> floors = this.parkingRepository.findAllFloors(parkingId);
+
+        floors.forEach(floor -> {
+            Long floorId = floor.getFloorId();
+            int reservationsPerFloor = this.reservationRepository.findAllCurrentReservationsPerFloor(parkingId, floorId).size();
+            floor.setSlotsNumber(floor.getSlotsNumber() - reservationsPerFloor);
+        });
+        return floors;
     }
 }
