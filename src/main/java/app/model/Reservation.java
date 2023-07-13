@@ -39,6 +39,7 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(name = "parking_id")
     private Parking parking;
+    private String parkingReservationAddress;
 
     public Reservation() {
     }
@@ -53,13 +54,14 @@ public class Reservation {
         this.exitDate = exitDate;
     }
 
-    public Reservation(int floorId, String vehiclePlate, String vehicleModel, Long vehicleFee, String entryDate, String exitDate) {
+    public Reservation(int floorId, String vehiclePlate, String vehicleModel, Long vehicleFee, String entryDate, String exitDate, String parkingReservationAddress) {
         this.floorId = floorId;
         this.vehiclePlate = vehiclePlate;
         this.vehicleModel = vehicleModel;
         this.feeId = vehicleFee;
         this.entryDate = entryDate;
         this.exitDate = exitDate;
+        this.parkingReservationAddress = parkingReservationAddress;
     }
 
     public Long getId() {
@@ -132,5 +134,13 @@ public class Reservation {
 
     public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    public String getParkingReservationAddress() {
+        return this.parkingReservationAddress;
+    }
+
+    public void setParkingReservationAddress(String parkingReservationAddress) {
+        this.parkingReservationAddress = parkingReservationAddress;
     }
 }
