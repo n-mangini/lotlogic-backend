@@ -107,10 +107,10 @@ public class ReservationService {
 
             LocalDateTime dateTime1 = LocalDateTime.parse(entryDate, dtf);
             Duration duration = Duration.between(dateTime1, LocalDateTime.now());
-            long hours = duration.toHours();
 
             Fee reservationFee = this.feeRepository.findById(reservation.getFeeId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Fee " + reservation.getFeeId() + "not found"));
-            return (double) (reservationFee.getFeePrice() * hours);
+
+            return (double) (duration.getSeconds() * reservationFee.getFeePrice() / (3600));
         }
     }
 

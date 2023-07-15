@@ -38,3 +38,6 @@ out/
 
 ### Gradle ###
 gradle.properties
+
+/db
+/mp
