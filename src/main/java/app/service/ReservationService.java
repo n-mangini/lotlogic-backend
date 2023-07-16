@@ -90,6 +90,9 @@ public class ReservationService {
         if (reservation.getExitDate() != null) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "reservation already ended");
         }
+        if (reservation.getAmount() != 0.0){
+            return reservation;
+        }
         Double price = calculateReservationPrice(reservationId);
         reservation.setAmount(price);
         this.reservationRepository.save(reservation);

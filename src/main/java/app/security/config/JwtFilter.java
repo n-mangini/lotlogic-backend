@@ -33,7 +33,7 @@ public class JwtFilter extends GenericFilterBean {
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
         response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
 
-        if ("OPTIONS".equals(request.getMethod()) || request.getServletPath().contains("/api/auth/*")) {
+        if ("OPTIONS".equals(request.getMethod()) || request.getServletPath().contains("/api/auth/*") || request.getServletPath().contains("/api/mercadopago/*")) {
             response.setStatus(HttpServletResponse.SC_OK);
             filterChain.doFilter(request, response);
             return;

@@ -6,6 +6,7 @@ import app.model.Reservation;
 import app.model.dto.ReservationAddForm;
 import app.model.dto.ReservationEditForm;
 import app.model.projection.ParkingProjection;
+import app.payment.MercadoPagoService;
 import app.service.ParkingService;
 import app.service.ReservationService;
 import org.springframework.http.HttpStatus;
@@ -20,10 +21,12 @@ import java.util.List;
 public class EmployeeController {
     private final ReservationService reservationService;
     private final ParkingService parkingService;
+    private final MercadoPagoService mercadoPagoClient;
 
-    public EmployeeController(ReservationService reservationService, ParkingService parkingService) {
+    public EmployeeController(ReservationService reservationService, ParkingService parkingService, MercadoPagoService mercadoPagoClient) {
         this.reservationService = reservationService;
         this.parkingService = parkingService;
+        this.mercadoPagoClient = mercadoPagoClient;
     }
 
     //check in

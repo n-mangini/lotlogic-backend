@@ -33,7 +33,7 @@ public class Reservation {
     private Long feeId;
 
     @Column
-    private Double amount;
+    private Double amount = 0.0;
 
     @JsonIgnore
     @ManyToOne
