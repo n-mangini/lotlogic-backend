@@ -106,9 +106,9 @@ CommandLineAppStartupRunner implements CommandLineRunner {
         this.parkingRepository.save(avCorrientesParking);
 
 
-        Reservation reservation7 = new Reservation(4, "LAK826", "Tesla Model X", 6L, "2023/07/18 20:00:00", "2023/07/18 23:00:00", "Jeronimo Salguero 3172");
-        Reservation reservation8 = new Reservation(5, "KAJ", "Renault Sandero", 6L, "2023/07/18 15:30:00", "2023/07/18 23:00:00", "Jeronimo Salguero 3172");
-        Reservation reservation9 = new Reservation(5, "AB839JSI", "Peugeot 208", 6L, "2023/07/18 16:00:00", null, "Jeronimo Salguero 3172");
+        Reservation reservation7 = new Reservation(4, "A123BCD", "Honda Wave", 6L, "2023/07/18 20:00:00", "2023/07/18 23:00:00", "Jeronimo Salguero 3172");
+        Reservation reservation8 = new Reservation(5, "678IZJ", "Tornado", 6L, "2023/07/18 15:30:00", "2023/07/18 23:00:00", "Jeronimo Salguero 3172");
+        Reservation reservation9 = new Reservation(5, "960GAO", "Econo C90", 6L, "2023/07/18 16:00:00", null, "Jeronimo Salguero 3172");
         Parking jeronimoSalgueroParking = this.parkingRepository.findById(2L).get();
         jeronimoSalgueroParking.setReservations(new ArrayList<>(Arrays.asList(reservation7, reservation8, reservation9)));
         this.parkingRepository.save(jeronimoSalgueroParking);
