@@ -38,7 +38,7 @@ public class UserService {
 
     public String loginUser(@RequestBody @NotNull UserLoginForm user) {
         final Optional<User> userDni = this.userRepository.findByDni(user.dni());
-        if (userDni.isEmpty()) {
+        if (userDni.isEmpty() || !userDni.get().isActive()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user " + user.dni() + " not found");
         }
         final Optional<User> userData = this.userRepository.findUserByDniAndPassword(user.dni(), user.password());

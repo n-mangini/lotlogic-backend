@@ -49,7 +49,8 @@ public class ReservationService {
 
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
             LocalDateTime date = LocalDateTime.now();
-            parking.getReservations().add(new Reservation(reservationAddForm.floor().intValue(), reservationAddForm.vehiclePlate(), reservationAddForm.vehicleModel(), reservationAddForm.fee(), dtf.format(date), null, parking.getAddress()));
+            Reservation reservation = new Reservation(reservationAddForm.floor().intValue(), reservationAddForm.vehiclePlate(), reservationAddForm.vehicleModel(), reservationAddForm.fee(), dtf.format(date), null, parking.getAddress());
+            parking.getReservations().add(reservation);
             this.parkingRepository.save(parking);
         }
     }

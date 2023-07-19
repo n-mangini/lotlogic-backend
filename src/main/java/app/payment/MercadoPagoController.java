@@ -26,6 +26,14 @@ public class MercadoPagoController {
     @DeleteMapping(path = "/cancel-payment")
     public Mono<ResponseEntity<Object>> createPaymentOrder() {
         return this.mercadoPagoService.makeCancelOrderRequest()
+                .doOnSuccess(response -> {
+                    System.out.println("DELETE request successful");
+                    System.out.println("Response: " + response);
+                })
+                .doOnError(error -> {
+                    System.err.println("An error occurred during DELETE request");
+                    error.printStackTrace();
+                })
                 .thenReturn(ResponseEntity.ok().build())
                 .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()));
     }
