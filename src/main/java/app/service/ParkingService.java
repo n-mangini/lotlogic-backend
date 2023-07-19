@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ParkingService {
@@ -83,7 +84,7 @@ public class ParkingService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user " + ownerDni + " not found");
         }
         User user = userOptional.get();
-        return user.getParkings();
+        return user.getParkings().stream().filter(Parking::isActive).collect(Collectors.toList());
     }
 
     public List<ParkingProjection> getAllParkingsOfEmployee(String employeeDni) {

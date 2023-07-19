@@ -115,9 +115,9 @@ public class UserService {
 
     public void updateOwner(@NotNull Long userId, @NotNull UserEditForm userEditForm) {
         //check dni exists
-        final Optional<User> userByDni = this.userRepository.findByDni(userEditForm.dni());
+/*        final Optional<User> userByDni = this.userRepository.findByDni(userEditForm.dni());
         if (userByDni.isPresent())
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "employee with DNI " + userByDni.get().getDni() + " already exists");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "employee with DNI " + userByDni.get().getDni() + " already exists");*/
 
         final Optional<User> findUserById = this.userRepository.findById(userId);
         if (findUserById.isPresent()) {
